@@ -1,6 +1,8 @@
 package com.app.remindme
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.app.remindme.adapter.CalendarAdapter
 import com.app.remindme.bottomsheets.EventsBottomSheet
@@ -26,8 +28,11 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnEachListener {
         setContentView(binding?.root)
 
 
-        binding?.inclLayout?.tvTitle?.text = SimpleDateFormat("EEEE").format(mCalendar.time)
-
+        binding?.inclLayout?.tvTitle?.apply {
+            text = SimpleDateFormat("EEEE").format(mCalendar.time)
+        }
+        binding?.inclLayout?.ivBack?.visibility = View.GONE
+        binding?.inclLayout?.ivSettings?.visibility = View.GONE
         init()
     }
 
@@ -54,6 +59,10 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnEachListener {
 
 
     private fun handleEvents() {
+        binding?.btAddEvent?.setOnClickListener{
+            val intent = Intent(this@MainActivity,AddEvents::class.java)
+            startActivity(intent)
+        }
     }
 
 

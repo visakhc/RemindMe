@@ -27,6 +27,15 @@
     <item name="cornerSizeTopRight">@dimen/_20sdp</item>
 </style>
 
+    <style name="customFAB" parent="">
+        <item name="fabSize">@dimen/_100sdp</item>
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">@dimen/_16sdp</item>
+        <item name="cornerSizeTopLeft">@dimen/_16sdp</item>
+        <item name="cornerSizeBottomRight">@dimen/_16sdp</item>
+        <item name="cornerSizeBottomLeft">@dimen/_16sdp</item>
+</style>
+
 <style name="roundedCardView3" parent="">
     <item name="cornerFamily">rounded</item>
     <item name="cornerSizeTopRight">0dp</item>

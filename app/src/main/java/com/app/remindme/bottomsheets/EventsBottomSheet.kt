@@ -1,38 +1,27 @@
 package com.app.remindme.bottomsheets
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.app.remindme.AddEvents
 import com.app.remindme.R
 import com.app.remindme.adapter.EventsAdapter
-import com.app.remindme.databinding.HomeAlertLayoutBinding
+import com.app.remindme.databinding.BottomSheetLayoutBinding
 import com.app.remindme.model.EventsModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
 class EventsBottomSheet(date: Int) : BottomSheetDialogFragment() {
-    private var binding: HomeAlertLayoutBinding? = null
+    private var binding: BottomSheetLayoutBinding? = null
     private val mDate = date
     private var meventsArray = mutableListOf(
-        EventsModel("rdtcfygvbh","lkkk"),
-        EventsModel("rdtcfygvbh","lkkk"),
-        EventsModel("rdtcfygvbh","lkkk"),
-        EventsModel("rdtcfygvbh","lkkk"),
-        EventsModel("rdtcfygvbh","lkkk"),
-        EventsModel("rdtcfygvbh","lkkk"),
-        EventsModel("rdtcfygvbh","lkkk"),
-        EventsModel("rdtcfygvbh","lkkk"),
-        EventsModel("rdtcfygvbh","lkkk"),
-        EventsModel("rdtcfygvbh","lkkk"),
-        EventsModel("rdtcfygvbh","lkkk"),
-        EventsModel("rdtcfygvbh","lkkk"),
-        EventsModel("rdtcfygvbh","lkkk"),
-        EventsModel("rdtcfygvbh","lkkk"),
-        EventsModel("rdtcfygvbh","lkkk"),
-        EventsModel("rdtcfygvbh","lkkk"),
+        EventsModel("Title 1", "Descripion 1"),
+        EventsModel("Title 2", "Descripion 2"),
+        EventsModel("Title 3", "Descripion 3"),
     )
 
 
@@ -41,7 +30,7 @@ class EventsBottomSheet(date: Int) : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = HomeAlertLayoutBinding.inflate(inflater, container, false)
+        binding = BottomSheetLayoutBinding.inflate(inflater, container, false)
         return binding?.root
     }
 
@@ -54,13 +43,12 @@ class EventsBottomSheet(date: Int) : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         init()
-
     }
 
 
     fun init() {
         val cal = Calendar.getInstance()
-        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), mDate+1)
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), mDate + 1)
         binding?.tvDate?.text = SimpleDateFormat("MMM, dd").format(cal.time)
 
 
@@ -70,6 +58,13 @@ class EventsBottomSheet(date: Int) : BottomSheetDialogFragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = recyclerAdapter
         }
+        handleEvents()
+    }
 
+    private fun handleEvents() {
+        binding?.ivAdd?.setOnClickListener {
+            val intent = Intent(requireContext(), AddEvents::class.java)
+            startActivity(intent)
+        }
     }
 }
