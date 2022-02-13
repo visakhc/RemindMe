@@ -15,8 +15,25 @@ import java.util.*
 
 class EventsBottomSheet(date: Int) : BottomSheetDialogFragment() {
     private var binding: HomeAlertLayoutBinding? = null
-    private val mDate = date+1
-    private var meventsArray = mutableListOf(EventsModel("rdtcfygvbh","lkkk"))
+    private val mDate = date
+    private var meventsArray = mutableListOf(
+        EventsModel("rdtcfygvbh","lkkk"),
+        EventsModel("rdtcfygvbh","lkkk"),
+        EventsModel("rdtcfygvbh","lkkk"),
+        EventsModel("rdtcfygvbh","lkkk"),
+        EventsModel("rdtcfygvbh","lkkk"),
+        EventsModel("rdtcfygvbh","lkkk"),
+        EventsModel("rdtcfygvbh","lkkk"),
+        EventsModel("rdtcfygvbh","lkkk"),
+        EventsModel("rdtcfygvbh","lkkk"),
+        EventsModel("rdtcfygvbh","lkkk"),
+        EventsModel("rdtcfygvbh","lkkk"),
+        EventsModel("rdtcfygvbh","lkkk"),
+        EventsModel("rdtcfygvbh","lkkk"),
+        EventsModel("rdtcfygvbh","lkkk"),
+        EventsModel("rdtcfygvbh","lkkk"),
+        EventsModel("rdtcfygvbh","lkkk"),
+    )
 
 
     override fun onCreateView(
@@ -43,7 +60,7 @@ class EventsBottomSheet(date: Int) : BottomSheetDialogFragment() {
 
     fun init() {
         val cal = Calendar.getInstance()
-        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), mDate)
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), mDate+1)
         binding?.tvDate?.text = SimpleDateFormat("MMM, dd").format(cal.time)
 
 
