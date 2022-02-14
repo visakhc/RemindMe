@@ -15,9 +15,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EventsBottomSheet(date: Int) : BottomSheetDialogFragment() {
+class EventsBottomSheet(date: Int, month: Int) : BottomSheetDialogFragment() {
     private var binding: BottomSheetLayoutBinding? = null
     private val mDate = date
+    private val mMonth = month
+
     private var meventsArray = mutableListOf(
         EventsModel("Title 1", "Descripion 1"),
         EventsModel("Title 2", "Descripion 2"),
@@ -48,7 +50,7 @@ class EventsBottomSheet(date: Int) : BottomSheetDialogFragment() {
 
     fun init() {
         val cal = Calendar.getInstance()
-        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), mDate + 1)
+        cal.set(cal.get(Calendar.YEAR), mMonth, mDate + 1)
         binding?.tvDate?.text = SimpleDateFormat("MMM, dd").format(cal.time)
 
 

@@ -13,10 +13,12 @@ import java.util.*
 
 class CalendarAdapter(
     private val itemList: List<CalenderModel>,
+    private  val mMonth: Int,
     private var mOnEachListener: OnEachListener,
 ) :
     RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
     val today = Calendar.getInstance().get(Calendar.DATE)
+    val thisMonth = Calendar.getInstance().get(Calendar.MONTH)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
@@ -57,7 +59,7 @@ class CalendarAdapter(
             holder.mNum.text = day
         }
 
-        if ((position+1) == today) {
+        if ((position+1) == today && thisMonth == mMonth ) {
             holder.d.setBackgroundResource(R.drawable.shape_border)
         }
     }

@@ -54,5 +54,8 @@ dependencies {
 
     implementation 'com.github.Spikeysanju:MotionToast:1.4'
 
+    //string vertical picker
+    implementation "com.paulrybitskyi.valuepicker:valuepicker:1.0.3"
+
 
 }

@@ -11,6 +11,9 @@ import com.app.remindme.model.CalenderModel
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import com.paulrybitskyi.valuepicker.ValuePickerView
+import com.paulrybitskyi.valuepicker.model.Item
+import com.paulrybitskyi.valuepicker.model.PickerItem
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -18,8 +21,9 @@ import java.util.*
 class MainActivity : AppCompatActivity(), CalendarAdapter.OnEachListener {
 
     private var binding: ActivityMainBinding? = null
-    private var arrayDatewe = mutableListOf<CalenderModel>()
+    private var modelList = mutableListOf<CalenderModel>()
     private val mCalendar = Calendar.getInstance()
+    private var mMonth = mCalendar.get(Calendar.MONTH)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,36 +35,37 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnEachListener {
         binding?.inclLayout?.tvTitle?.apply {
             text = SimpleDateFormat("EEEE").format(mCalendar.time)
         }
-        binding?.inclLayout?.ivBack?.visibility = View.GONE
         binding?.inclLayout?.ivSettings?.visibility = View.GONE
         init()
     }
 
     private fun init() {
         setRecyclerview()
+        setToolbarMonth()
         handleEvents()
     }
 
 
-    private fun showDialog() {
+    private fun setToolbarMonth() {
 
-
-        /*   val UPI = "upi://pay?pa=8547917584@okbizaxis&pn=Prabha Pooja Store&mc=5943&aid=uGICAgIDtrYDsWQ&tr=BCR2DN6T2WD2FQTC"
-           val intent = Intent()
-           intent.action = Intent.ACTION_VIEW
-           intent.data = Uri.parse(UPI)
-           val chooser = Intent.createChooser(intent, "Pay with...")
-           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-               startActivityForResult(chooser, 1, null)
-           }
-           startActivityForResult(chooser,1,null)
-*/
+        with(binding?.inclLayout?.valuePickerView) {
+            val pickerItems = generateTeamPickerItems()
+            this?.items = pickerItems
+            this?.setSelectedItem(pickerItems[mMonth])
+            this?.onItemSelectedListener = ValuePickerView.OnItemSelectedListener { item ->
+                val pos = this?.selectedItem?.id
+                if (pos != null) {
+                    mMonth = pos
+                    setRecyclerview()
+                }
+            }
+        }
     }
 
 
     private fun handleEvents() {
-        binding?.btAddEvent?.setOnClickListener{
-            val intent = Intent(this@MainActivity,AddEvents::class.java)
+        binding?.btAddEvent?.setOnClickListener {
+            val intent = Intent(this@MainActivity, AddEvents::class.java)
             startActivity(intent)
         }
     }
@@ -73,31 +78,63 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnEachListener {
             justifyContent = JustifyContent.SPACE_EVENLY
         }
         val data = setData(mCalendar)
-        val recyclerAdapter = CalendarAdapter(data, this)
+        val recyclerAdapter = CalendarAdapter(data, mMonth, this)
 
         binding?.recyclerView?.apply {
             setHasFixedSize(true)
             layoutManager = flexboxLayoutManager
             adapter = recyclerAdapter
         }
+
+
     }
 
     private fun setData(calendar: Calendar): MutableList<CalenderModel> {
-//        val year = calendar.get(Calendar.YEAR).toString()
-//        val month = calendar.get(Calendar.MONTH).toString()
-//        val date = calendar.get(Calendar.DATE).toString()
-//        val monthinWords = SimpleDateFormat("MMMM").format(calendar.time)
+       /* val year = calendar.get(Calendar.YEAR).toString()
+        val month = calendar.get(Calendar.MONTH).toString()
+        val date = calendar.get(Calendar.DATE).toString()
+        val monthinWords = SimpleDateFormat("MMMM").format(calendar.time)*/
 
+        modelList.clear()
+
+        calendar.set(calendar.get(Calendar.YEAR), mMonth, 5)
         val maxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+
         for (i in 1..maxDay) {
-            calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), i)
+            calendar.set(calendar.get(Calendar.YEAR), mMonth, i)
             val day = (SimpleDateFormat("EEEE").format(calendar.time))
-            arrayDatewe.add(CalenderModel(i.toString(), day))
+            modelList.add(CalenderModel(i.toString(), day))
         }
-        return arrayDatewe
+        return modelList
+    }
+
+
+    private fun generateTeamPickerItems(): List<Item> {
+        return monthList.values().map {
+            PickerItem(
+                id = it.ordinal,
+                title = it.longName,
+                payload = it
+            )
+        }
     }
 
     override fun OnEachClick(position: Int) {
-        EventsBottomSheet(position).show(supportFragmentManager, "events")
+        EventsBottomSheet(position, mMonth).show(supportFragmentManager, "events")
     }
+}
+
+internal enum class monthList(val longName: String) {
+    January(longName = "January"),
+    February(longName = "February"),
+    March(longName = "March"),
+    April(longName = "April"),
+    May(longName = "May"),
+    June(longName = "June"),
+    July(longName = "July"),
+    August(longName = "August"),
+    September(longName = "September"),
+    October(longName = "October"),
+    November(longName = "November"),
+    December(longName = "December")
 }

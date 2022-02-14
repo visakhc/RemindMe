@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/RemindMe/app/src/main/res/drawable/divider.xml" value="0.337" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/RemindMe/app/src/main/res/drawable/ic_add_circle.xml" value="0.182" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/RemindMe/app/src/main/res/drawable/ic_add_outline.xml" value="0.2535" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/RemindMe/app/src/main/res/drawable/shape_border.xml" value="0.352" />
@@ -14,6 +15,8 @@
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/RemindMe/app/src/main/res/layout/item_calender.xml" value="0.35052083333333334" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/RemindMe/app/src/main/res/layout/item_events.xml" value="0.20364583333333333" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/RemindMe/app/src/main/res/layout/toolbar.xml" value="0.35052083333333334" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/RemindMe/app/src/main/res/layout/toolbar_home.xml" value="0.35052083333333334" />
+        <entry key="..\:/Users/LENOVO/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_spinner_item.xml" value="0.35052083333333334" />
       </map>
     </option>
   </component>
