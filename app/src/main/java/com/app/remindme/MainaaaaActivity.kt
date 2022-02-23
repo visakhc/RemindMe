@@ -26,7 +26,8 @@ class MainaaaaActivity : AppCompatActivity() {
         notesViewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
         notesViewModel.allNotes.observe(this, androidx.lifecycle.Observer { notes ->
             Toast.makeText(this, notes.toString(), Toast.LENGTH_SHORT).show()
-            binding?.tv?.text = notes.elementAt(1).title.toString()
+           // binding?.tv?.text = notes.elementAt(1).title.toString()
+            binding?.tv?.text = notes.toString()
 //            fbind?.textView2?.text = notes.toString()
         })
     }
