@@ -1,4 +1,4 @@
-package com.sba.notes.database
+package com.app.remindme.database
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 class NoteSaveViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: NotesRepository
     init {
-        val notesDao = NotesRoomDatabase.getDatabase(application,viewModelScope).notesDao()
+        val notesDao = NotesRoomDatabase.getDatabase(application, viewModelScope).notesDao()
         repository = NotesRepository(notesDao)
     }
     fun insertNote(note: Notes) = viewModelScope.launch(Dispatchers.IO) {

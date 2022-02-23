@@ -1,6 +1,11 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+    id("androidx.navigation.safeargs.kotlin")
+
 }
 
 android {
@@ -36,6 +41,30 @@ android {
 
 dependencies {
 
+    def room_version = "2.4.1"
+   // def nav_version = "2.5.0-alpha03"
+    def nav_version = "2.4.1"
+
+    // Java language implementation
+    implementation "androidx.navigation:navigation-fragment:$nav_version"
+    implementation "androidx.navigation:navigation-ui:$nav_version"
+
+    // Kotlin
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    // Feature module Support
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
+
+    // Testing Navigation
+    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
+
+    // Jetpack Compose Integration
+    implementation "androidx.navigation:navigation-compose:$nav_version"
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.31"
+
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
@@ -58,4 +87,20 @@ dependencies {
     implementation "com.paulrybitskyi.valuepicker:valuepicker:1.0.3"
 
 
+    //Room Persistence Library
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+    //Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:$room_version"
+
+    //Navigation component Library
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    //Material Design Library
+    implementation 'com.google.android.material:material:1.5.0'
+
+    //Slide To Act Library
+    implementation "com.ncorti:slidetoact:0.8.0"
 }

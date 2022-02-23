@@ -1,4 +1,4 @@
-package com.sba.notes.database
+package com.app.remindme.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

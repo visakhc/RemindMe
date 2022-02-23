@@ -1,6 +1,8 @@
-package com.sba.notes.database
+package com.app.remindme.database
 
 import androidx.lifecycle.LiveData
+import com.app.remindme.database.Notes
+import com.app.remindme.database.NotesDao
 
 class NotesRepository(private val noteDao: NotesDao) {
 

@@ -1,21 +1,19 @@
-package com.sba.notes
+package com.app.remindme
 
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.sba.notes.database.NoteSaveViewModel
-import com.sba.notes.database.Notes
-import com.sba.notes.databinding.FragmentEditNoteBinding
+import com.app.remindme.database.NoteSaveViewModel
+import com.app.remindme.database.Notes
+import com.app.remindme.databinding.FragmentEditNoteBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -42,7 +40,7 @@ class EditNoteFragment : BottomSheetDialogFragment() {
         notesSaveViewModel = ViewModelProvider(this).get(NoteSaveViewModel::class.java)
 
         arguments?.let {
-            note = EditNoteFragmentArgs.fromBundle(it).updateNote
+          note = EditNoteFragmentArgs.fromBundle(it).updateNote
             binding.titleEdittext.setText(note?.title)
             binding.descEditText.setText(note?.description)
             if (note != null) {

@@ -1,4 +1,4 @@
-package com.sba.notes
+package com.app.remindme
 
 import android.app.AlertDialog
 import android.content.SharedPreferences
@@ -10,7 +10,6 @@ import android.util.Log
 import android.view.*
 import android.widget.RadioButton
 import android.widget.RadioGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 
@@ -19,8 +18,8 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.*
 import com.google.android.material.snackbar.Snackbar
 import com.ncorti.slidetoact.SlideToActView
-import com.sba.notes.database.NotesViewModel
-import com.sba.notes.databinding.FragmentAllNotesBinding
+import com.app.remindme.database.NotesViewModel
+import com.app.remindme.databinding.FragmentAllNotesBinding
 import kotlin.properties.Delegates
 
 

@@ -1,4 +1,4 @@
-package com.sba.notes.database
+package com.app.remindme.database
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
