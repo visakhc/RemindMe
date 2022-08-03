@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.app.remindme.databinding.ItemEventsBinding
-import com.app.remindme.model.EventsModel
+import com.app.remindme.data.model.EventsModel
 
 class EventsAdapter(private val itemList: List<EventsModel>, context: Context) :
     RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {

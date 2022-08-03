@@ -6,11 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.app.remindme.AddEvents
+import com.app.remindme.ui.activities.AddEvents
 import com.app.remindme.R
 import com.app.remindme.adapter.EventsAdapter
 import com.app.remindme.databinding.BottomSheetLayoutBinding
-import com.app.remindme.model.EventsModel
+import com.app.remindme.data.model.EventsModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.text.SimpleDateFormat
 import java.util.*

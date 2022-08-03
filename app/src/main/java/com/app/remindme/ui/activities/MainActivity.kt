@@ -1,19 +1,19 @@
-package com.app.remindme
+package com.app.remindme.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.app.remindme.adapter.CalendarAdapter
 import com.app.remindme.bottomsheets.EventsBottomSheet
+import com.app.remindme.data.model.CalenderModel
 import com.app.remindme.databinding.ActivityMainBinding
-import com.app.remindme.model.CalenderModel
+import com.app.remindme.ui.viewmodel.EventsViewModel
+import com.app.remindme.utils.logThis
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
-import com.paulrybitskyi.valuepicker.ValuePickerView
-import com.paulrybitskyi.valuepicker.model.Item
-import com.paulrybitskyi.valuepicker.model.PickerItem
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,11 +25,13 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnEachListener {
     private val mCalendar = Calendar.getInstance()
     private var mMonth = mCalendar.get(Calendar.MONTH)
 
+    private lateinit var viewModel: EventsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
+        viewModel = ViewModelProvider(this)[EventsViewModel::class.java]
 
 
         binding?.inclLayout?.tvTitle?.apply {
@@ -42,13 +44,20 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnEachListener {
     private fun init() {
         setRecyclerview()
         setToolbarMonth()
+        roomDB()
         handleEvents()
+    }
+
+    private fun roomDB() {
+        viewModel.readAllData.observe(this@MainActivity) {
+            logThis(it)
+        }
     }
 
 
     private fun setToolbarMonth() {
 
-        with(binding?.inclLayout?.valuePickerView) {
+/*        with(binding?.inclLayout?.valuePickerView) {
             val pickerItems = generateTeamPickerItems()
             this?.items = pickerItems
             this?.setSelectedItem(pickerItems[mMonth])
@@ -59,7 +68,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnEachListener {
                     setRecyclerview()
                 }
             }
-        }
+        }*/
     }
 
 
@@ -90,10 +99,10 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnEachListener {
     }
 
     private fun setData(calendar: Calendar): MutableList<CalenderModel> {
-       /* val year = calendar.get(Calendar.YEAR).toString()
-        val month = calendar.get(Calendar.MONTH).toString()
-        val date = calendar.get(Calendar.DATE).toString()
-        val monthinWords = SimpleDateFormat("MMMM").format(calendar.time)*/
+        /* val year = calendar.get(Calendar.YEAR).toString()
+         val month = calendar.get(Calendar.MONTH).toString()
+         val date = calendar.get(Calendar.DATE).toString()
+         val monthinWords = SimpleDateFormat("MMMM").format(calendar.time)*/
 
         modelList.clear()
 
@@ -109,7 +118,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnEachListener {
     }
 
 
-    private fun generateTeamPickerItems(): List<Item> {
+/*    private fun generateTeamPickerItems(): List<Item> {
         return monthList.values().map {
             PickerItem(
                 id = it.ordinal,
@@ -117,7 +126,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnEachListener {
                 payload = it
             )
         }
-    }
+    }*/
 
     override fun OnEachClick(position: Int) {
         EventsBottomSheet(position, mMonth).show(supportFragmentManager, "events")

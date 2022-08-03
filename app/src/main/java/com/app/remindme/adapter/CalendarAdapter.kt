@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.app.remindme.R
-import com.app.remindme.model.CalenderModel
+import com.app.remindme.data.model.CalenderModel
 import java.util.*
 
 

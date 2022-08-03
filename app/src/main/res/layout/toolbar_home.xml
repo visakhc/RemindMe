@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/_40sdp">
-    <!--
+
         <Spinner
-            android:id="@+id/sp_Month"
+            android:id="@+id/valuePickerView"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             style="@style/normalTextRegular"
@@ -14,25 +14,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/black" />-->
+            app:tint="@color/black" />
 
-    <com.paulrybitskyi.valuepicker.ValuePickerView
-        android:id="@+id/valuePickerView"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/_10sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:vpv_areDividersEnabled="true"
-        app:vpv_dividerColor="@color/alice_blue"
-        app:vpv_flingSpeedFactor="0.1"
-        app:vpv_isInfiniteScrollEnabled="true"
-        app:vpv_maxVisibleItems="1"
-        app:vpv_orientation="vertical"
-        app:vpv_textColor="@color/black"
-        app:vpv_textSize="@dimen/_10ssp"
-        app:vpv_textTypeface="@font/poppins_regular" />
 
     <TextView
         android:id="@+id/tvTitle"
