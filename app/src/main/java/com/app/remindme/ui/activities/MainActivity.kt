@@ -34,11 +34,10 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnEachListener {
         viewModel = ViewModelProvider(this)[EventsViewModel::class.java]
 
 
-        binding?.inclLayout?.tvTitle?.apply {
+        binding?.tvTitle?.apply {
             text = SimpleDateFormat("EEEE").format(mCalendar.time)
         }
-        binding?.inclLayout?.ivSettings?.visibility = View.GONE
-        init()
+         init()
     }
 
     private fun init() {
@@ -57,7 +56,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnEachListener {
 
     private fun setToolbarMonth() {
 
-/*        with(binding?.inclLayout?.valuePickerView) {
+/*   with(binding?.inclLayout?.valuePickerView) {
             val pickerItems = generateTeamPickerItems()
             this?.items = pickerItems
             this?.setSelectedItem(pickerItems[mMonth])
@@ -68,7 +67,8 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnEachListener {
                     setRecyclerview()
                 }
             }
-        }*/
+        }
+        */
     }
 
 

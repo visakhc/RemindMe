@@ -6,20 +6,63 @@
     android:layout_height="match_parent"
     tools:context=".ui.activities.MainActivity">
 
-    <include
-        android:id="@+id/incl_layout"
-        layout="@layout/toolbar_home" />
+    <Spinner
+        android:id="@+id/valuePickerView"
+        style="@style/normalTextRegular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/black" />
+
+
+    <TextView
+        android:id="@+id/tvTitle"
+        style="@style/largeTextSemiBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Title"
+        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivSettings"
+        android:layout_width="@dimen/_45sdp"
+        android:layout_height="@dimen/_45sdp"
+        android:padding="@dimen/_10sdp"
+        android:src="@drawable/ic_settings"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/black" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivSettings" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/_10sdp"
+        android:clipToPadding="false"
+        tools:listitem="@layout/item_calender"
         android:overScrollMode="never"
-        app:layout_constraintBottom_toTopOf="@id/bt_add_event"
+        android:paddingBottom="@dimen/_50sdp"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/incl_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/view" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/bt_add_event"
