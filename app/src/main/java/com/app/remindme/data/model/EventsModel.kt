@@ -10,6 +10,7 @@ data class EventsModel(
     val year: Int,
     val title: String,
     val description: String,
+    val emoji: String = "",
     @PrimaryKey(autoGenerate = true) var id: Int? = null
 
 )

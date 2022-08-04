@@ -33,10 +33,14 @@ class CalendarAdapter(private var listener: OnClickListener) :
 
     override fun onBindViewHolder(holder: CalendarAdapter.MyViewHolder, position: Int) {
         with(localList[position]) {
-            holder.binding.tvDate.text = date
+       //     holder.binding.tvEventEmojis.text = emoji
+            holder.binding.tvDate.text = date.toString()
             holder.binding.tvDay.text = day
             if ((position + 1) == thisDay && mMonth == thisMonth) {
                 holder.binding.cardView.setBackgroundResource(R.drawable.shape_border)
+            }
+            holder.itemView.setOnClickListener {
+                listener.onItemClick(this)
             }
         }
     }

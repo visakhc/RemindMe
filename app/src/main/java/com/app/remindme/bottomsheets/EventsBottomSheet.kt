@@ -41,7 +41,7 @@ class EventsBottomSheet() : BottomSheetDialogFragment() {
 
     private fun init() {
         val cal = Calendar.getInstance()
-        cal.set(cal.get(Calendar.YEAR), mMonth, mDate + 1)
+       /* cal.set(cal.get(Calendar.YEAR), mMonth, mDate + 1)
         binding?.tvDate?.text = SimpleDateFormat("MMM, dd").format(cal.time)
 
 
@@ -50,7 +50,7 @@ class EventsBottomSheet() : BottomSheetDialogFragment() {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
             adapter = recyclerAdapter
-        }
+        }*/
 
     }
 

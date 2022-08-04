@@ -18,6 +18,9 @@ interface Dao {
     @Query("DELETE FROM user_table WHERE id = :userId")
     fun deleteUser(userId: Int)
 
- /*   @Query("SELECT * FROM user_table WHERE firstName LIKE :searchText")
-    fun searchUser(searchText: String): LiveData<List<EventsModel>>*/
+    @Query("SELECT * FROM user_table WHERE day =  4")
+    suspend fun findEvent(/*date: Int*//*, month: Int, year: Int*/): EventsModel
+/*
+    @Query("SELECT * FROM user_table WHERE day = :date")
+    fun findEvent(date: Int, month: Int, year: Int): LiveData<List<EventsModel>>*/
 }

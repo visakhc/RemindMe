@@ -9,7 +9,9 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.ViewModelProvider
 import com.app.remindme.R
 import com.app.remindme.adapter.CalendarAdapter
+import com.app.remindme.bottomsheets.EventsBottomSheet
 import com.app.remindme.data.model.CalenderModel
+import com.app.remindme.data.model.EventsModel
 import com.app.remindme.databinding.ActivityMainBinding
 import com.app.remindme.ui.viewmodel.EventsViewModel
 import com.app.remindme.utils.USERDATA
@@ -25,6 +27,7 @@ import java.util.*
 
 class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
 
+    private var eventList = emptyList<EventsModel>()
     private var mMonth: Int = -1
     private var mYear: Int = -1
     private var binding: ActivityMainBinding? = null
@@ -85,7 +88,8 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
 
     private fun roomDB() {
         viewModel.readAllData.observe(this@MainActivity) {
-            logThis("data from room db: $it")
+            eventList = it
+            logThis("eventList: $eventList")
         }
     }
 
@@ -97,7 +101,8 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
         for (i in 1..maxDayOfMonth) {
             cal.set(year, month, i)
             val dayInWords = getDayFormatted("EEEE", cal)
-            dayList.add(CalenderModel(i.toString(), dayInWords))
+
+          dayList.add(CalenderModel(i, dayInWords))
         }
         return dayList
     }
@@ -138,6 +143,12 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
     }
 
     override fun onItemClick(item: CalenderModel) {
-//        EventsBottomSheet(position, mMonth).show(supportFragmentManager, "events")
+        val eBSheet = EventsBottomSheet()
+        /*  eBSheet.arguments = Bundle().apply {
+              putParcelable("data", item)
+          }*/
+        eBSheet.show(supportFragmentManager, "events")
+        logThis("${item.date}, $mMonth, $mYear")
+       logThis(viewModel.findEvent(item.date, mMonth, mYear))
     }
 }

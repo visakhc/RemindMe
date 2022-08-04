@@ -3,6 +3,7 @@ package com.app.remindme.ui.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.remindme.data.database.DatabaseBuilder
 import com.app.remindme.data.database.Repository
@@ -18,7 +19,7 @@ class EventsViewModel(application: Application) : AndroidViewModel(application) 
 
     init {
         val userDao = DatabaseBuilder.getDatabase(application).userDao()
-        repository =  Repository(userDao)
+        repository = Repository(userDao)
         readAllData = repository.readAllData
     }
 
@@ -33,12 +34,12 @@ class EventsViewModel(application: Application) : AndroidViewModel(application) 
             repository.deleteUser(id)
         }
     }
-/*
-    fun searchUser(searchText: String): LiveData<List<EventsModel>>? {
-        var s: LiveData<List<EventsModel>>? = null
+
+    fun findEvent(date: Int, month: Int, year: Int): EventsModel?{
+         var ls:  EventsModel? = null
         viewModelScope.launch(Dispatchers.IO) {
-            s = repository.searchUser(searchText)
+            ls = repository.findEvent(date, month, year)
         }
-        return s
-    }*/
+        return ls
+    }
 }

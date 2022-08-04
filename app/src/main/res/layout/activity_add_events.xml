@@ -37,44 +37,57 @@
 
     <EditText
         android:id="@+id/et_title"
+        style="@style/normalTextMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/normalTextMedium"
         android:layout_marginHorizontal="@dimen/_18sdp"
         android:layout_marginTop="@dimen/_10sdp"
+        android:gravity="center"
         android:hint="event title"
         android:inputType="text|textAutoComplete|textAutoCorrect"
-         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timePicker" />
 
     <EditText
         android:id="@+id/et_desc"
+        style="@style/normalTextMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_18sdp"
-        android:layout_marginTop="@dimen/_40sdp"
+        android:gravity="center"
         android:hint="event description"
         android:inputType="text|textAutoComplete|textAutoCorrect"
-        style="@style/normalTextMedium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_title" />
+
+    <EditText
+        android:id="@+id/etEmoji"
+        style="@style/normalTextMedium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_18sdp"
+        android:gravity="center"
+        android:hint="priority emoji"
+        android:inputType="text|textAutoComplete|textAutoCorrect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_desc" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/bt_save"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_105sdp"
         android:paddingHorizontal="@dimen/_20sdp"
         android:text="Save Event"
         android:textAllCaps="false"
         app:cornerRadius="@dimen/_15sdp"
         app:elevation="@dimen/_10sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_desc" />
+        app:layout_constraintTop_toBottomOf="@+id/etEmoji" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

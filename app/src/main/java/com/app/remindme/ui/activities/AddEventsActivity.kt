@@ -37,9 +37,10 @@ class AddEvents : AppCompatActivity() {
             val day = binding?.datePicker?.dayOfMonth!!
             val month = binding?.datePicker?.month!!
             val year = binding?.datePicker?.year!!
+            val emoji = binding?.etTitle?.text.toString()
             val title = binding?.etTitle?.text.toString()
-            val desc = binding?.etDesc?.text.toString()
-            viewModel.addEvent(EventsModel(day, month, year, title, desc))
+            val desc = binding?.etEmoji?.text.toString()
+            viewModel.addEvent(EventsModel(day, month, year, title, desc, emoji))
         }
     }
 
