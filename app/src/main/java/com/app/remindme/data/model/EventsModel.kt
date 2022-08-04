@@ -5,6 +5,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "user_table")
 data class EventsModel(
+    val day: Int,
+    val month: Int,
+    val year: Int,
     val title: String,
     val description: String,
     @PrimaryKey(autoGenerate = true) var id: Int? = null

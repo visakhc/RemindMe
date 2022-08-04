@@ -3,27 +3,33 @@ package com.app.remindme.ui.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.ViewModelProvider
+import com.app.remindme.R
 import com.app.remindme.adapter.CalendarAdapter
-import com.app.remindme.bottomsheets.EventsBottomSheet
 import com.app.remindme.data.model.CalenderModel
 import com.app.remindme.databinding.ActivityMainBinding
 import com.app.remindme.ui.viewmodel.EventsViewModel
+import com.app.remindme.utils.USERDATA
+import com.app.remindme.utils.USERDATA.thisMonth
+import com.app.remindme.utils.getDayFormatted
+import com.app.remindme.utils.hide
 import com.app.remindme.utils.logThis
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
-import java.text.SimpleDateFormat
 import java.util.*
 
 
-class MainActivity : AppCompatActivity(), CalendarAdapter.OnEachListener {
+class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
 
+    private var mMonth: Int = -1
+    private var mYear: Int = -1
     private var binding: ActivityMainBinding? = null
-    private var modelList = mutableListOf<CalenderModel>()
-    private val mCalendar = Calendar.getInstance()
-    private var mMonth = mCalendar.get(Calendar.MONTH)
+    private val mAdapter by lazy { CalendarAdapter(this) }
+    private val flexboxLayout by lazy { FlexboxLayoutManager(this@MainActivity) }
 
     private lateinit var viewModel: EventsViewModel
 
@@ -31,119 +37,107 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnEachListener {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
-        viewModel = ViewModelProvider(this)[EventsViewModel::class.java]
 
-
-        binding?.tvTitle?.apply {
-            text = SimpleDateFormat("EEEE").format(mCalendar.time)
-        }
-         init()
-    }
-
-    private fun init() {
-        setRecyclerview()
-        setToolbarMonth()
+        init()
+        initViews()
         roomDB()
+        setCalendarView()
+
         handleEvents()
     }
 
-    private fun roomDB() {
-        viewModel.readAllData.observe(this@MainActivity) {
-            logThis(it)
-        }
+    private fun init() {
+        viewModel = ViewModelProvider(this)[EventsViewModel::class.java]
+        mMonth = USERDATA.thisMonth
+        mYear = USERDATA.thisYear
     }
 
-
-    private fun setToolbarMonth() {
-
-/*   with(binding?.inclLayout?.valuePickerView) {
-            val pickerItems = generateTeamPickerItems()
-            this?.items = pickerItems
-            this?.setSelectedItem(pickerItems[mMonth])
-            this?.onItemSelectedListener = ValuePickerView.OnItemSelectedListener { item ->
-                val pos = this?.selectedItem?.id
-                if (pos != null) {
-                    mMonth = pos
-                    setRecyclerview()
-                }
-            }
+    private fun initViews() {
+        binding?.btAddEvent?.hide() //for testing
+        binding?.tvDay?.text = getDayFormatted("EEEE")
+        binding?.tvMonth?.text = getDayFormatted("MMMM")
+        flexboxLayout.apply {
+            flexDirection = FlexDirection.ROW
+            justifyContent = JustifyContent.SPACE_EVENLY
         }
-        */
+        binding?.recyclerView?.layoutManager = flexboxLayout
+        binding?.recyclerView?.adapter = mAdapter
     }
-
 
     private fun handleEvents() {
+        binding?.ivSettings?.setOnClickListener {
+            val intent = Intent(this@MainActivity, AddEvents::class.java)
+            startActivity(intent)
+        }
         binding?.btAddEvent?.setOnClickListener {
             val intent = Intent(this@MainActivity, AddEvents::class.java)
             startActivity(intent)
         }
+        binding?.tvMonth?.setOnClickListener {
+            showMenu(it, R.menu.menu)
+        }
+    }
+
+    private fun setCalendarView() {
+        val data = calendarBuilder(mMonth, mYear)
+        mAdapter.updateList(mMonth, data)
+    }
+
+    private fun roomDB() {
+        viewModel.readAllData.observe(this@MainActivity) {
+            logThis("data from room db: $it")
+        }
+    }
+
+    private fun calendarBuilder(month: Int, year: Int): MutableList<CalenderModel> {
+        val dayList = mutableListOf<CalenderModel>()
+        val cal = Calendar.getInstance()
+        cal.set(year, month, 1)
+        val maxDayOfMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
+        for (i in 1..maxDayOfMonth) {
+            cal.set(year, month, i)
+            val dayInWords = getDayFormatted("EEEE", cal)
+            dayList.add(CalenderModel(i.toString(), dayInWords))
+        }
+        return dayList
     }
 
 
-    private fun setRecyclerview() {
-        val flexboxLayoutManager = FlexboxLayoutManager(this@MainActivity)
-        flexboxLayoutManager.apply {
-            flexDirection = FlexDirection.ROW
-            justifyContent = JustifyContent.SPACE_EVENLY
+    private fun showMenu(v: View, @MenuRes menuRes: Int) {
+        val popup = PopupMenu(this@MainActivity, v)
+        popup.menuInflater.inflate(menuRes, popup.menu)
+        popup.setOnMenuItemClickListener {
+            val month = when (it.itemId) {
+                R.id.january -> 0
+                R.id.february -> 1
+                R.id.march -> 2
+                R.id.april -> 3
+                R.id.may -> 4
+                R.id.june -> 5
+                R.id.july -> 6
+                R.id.august -> 7
+                R.id.september -> 8
+                R.id.october -> 9
+                R.id.november -> 10
+                R.id.december -> 11
+                else -> {
+                    -1
+                }
+            }
+            if (month != -1) {
+                mMonth = month
+                val cal = Calendar.getInstance()
+                cal.set(mYear, mMonth, 4)
+                binding?.tvMonth?.text = getDayFormatted("MMMM", cal)
+                binding?.tvDay?.text = if (mMonth == thisMonth) getDayFormatted("EEEE") else ""
+                setCalendarView()
+            }
+            return@setOnMenuItemClickListener true
         }
-        val data = setData(mCalendar)
-        val recyclerAdapter = CalendarAdapter(data, mMonth, this)
-
-        binding?.recyclerView?.apply {
-            setHasFixedSize(true)
-            layoutManager = flexboxLayoutManager
-            adapter = recyclerAdapter
-        }
-
-
+        popup.show()
     }
 
-    private fun setData(calendar: Calendar): MutableList<CalenderModel> {
-        /* val year = calendar.get(Calendar.YEAR).toString()
-         val month = calendar.get(Calendar.MONTH).toString()
-         val date = calendar.get(Calendar.DATE).toString()
-         val monthinWords = SimpleDateFormat("MMMM").format(calendar.time)*/
-
-        modelList.clear()
-
-        calendar.set(calendar.get(Calendar.YEAR), mMonth, 5)
-        val maxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
-
-        for (i in 1..maxDay) {
-            calendar.set(calendar.get(Calendar.YEAR), mMonth, i)
-            val day = (SimpleDateFormat("EEEE").format(calendar.time))
-            modelList.add(CalenderModel(i.toString(), day))
-        }
-        return modelList
+    override fun onItemClick(item: CalenderModel) {
+//        EventsBottomSheet(position, mMonth).show(supportFragmentManager, "events")
     }
-
-
-/*    private fun generateTeamPickerItems(): List<Item> {
-        return monthList.values().map {
-            PickerItem(
-                id = it.ordinal,
-                title = it.longName,
-                payload = it
-            )
-        }
-    }*/
-
-    override fun OnEachClick(position: Int) {
-        EventsBottomSheet(position, mMonth).show(supportFragmentManager, "events")
-    }
-}
-
-internal enum class monthList(val longName: String) {
-    January(longName = "January"),
-    February(longName = "February"),
-    March(longName = "March"),
-    April(longName = "April"),
-    May(longName = "May"),
-    June(longName = "June"),
-    July(longName = "July"),
-    August(longName = "August"),
-    September(longName = "September"),
-    October(longName = "October"),
-    November(longName = "November"),
-    December(longName = "December")
 }

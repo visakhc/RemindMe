@@ -6,20 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".ui.activities.MainActivity">
 
-    <Spinner
-        android:id="@+id/valuePickerView"
-        style="@style/normalTextRegular"
+    <TextView
+        android:id="@+id/tvMonth"
+        style="@style/normalTextMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_20sdp"
-        android:gravity="center"
+        android:padding="@dimen/_5sdp"
+        android:text="Month"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/black" />
-
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvTitle"
+        android:id="@+id/tv_day"
         style="@style/largeTextSemiBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
         android:layout_width="@dimen/_45sdp"
         android:layout_height="@dimen/_45sdp"
         android:padding="@dimen/_10sdp"
-        android:src="@drawable/ic_settings"
+        android:src="@drawable/ic_add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/black" />
@@ -54,15 +54,13 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:clipToPadding="false"
-        tools:listitem="@layout/item_calender"
         android:overScrollMode="never"
-        android:paddingBottom="@dimen/_50sdp"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        tools:listitem="@layout/item_calender" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/bt_add_event"

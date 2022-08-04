@@ -1,7 +1,6 @@
 package com.app.remindme.ui.activities
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.app.remindme.data.model.EventsModel
@@ -28,7 +27,6 @@ class AddEvents : AppCompatActivity() {
 
     private fun initViews() {
         binding?.inclLayout?.tvTitle?.text = "Add Events"
-        binding?.inclLayout?.ivSettings?.visibility = View.GONE
     }
 
     private fun handleEvents() {
@@ -36,9 +34,12 @@ class AddEvents : AppCompatActivity() {
             onBackPressed()
         }
         binding?.btSave?.setOnClickListener {
+            val day = binding?.datePicker?.dayOfMonth!!
+            val month = binding?.datePicker?.month!!
+            val year = binding?.datePicker?.year!!
             val title = binding?.etTitle?.text.toString()
             val desc = binding?.etDesc?.text.toString()
-            viewModel.addEvent(EventsModel(title, desc))
+            viewModel.addEvent(EventsModel(day, month, year, title, desc))
         }
     }
 

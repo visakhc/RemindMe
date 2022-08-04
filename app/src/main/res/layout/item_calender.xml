@@ -19,21 +19,21 @@
             style="@style/largeTextSemiBold"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:textAlignment="center"
             android:paddingTop="@dimen/_10sdp"
             android:text="30"
+            android:textAlignment="center"
             app:layout_constraintBottom_toTopOf="@+id/guideline2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/tv_day"
+            style="@style/smallTextRegular"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="@dimen/_10sdp"
             android:gravity="center"
             android:text="DAY"
-            style="@style/smallTextRegular"
             android:textColor="@color/dark_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
