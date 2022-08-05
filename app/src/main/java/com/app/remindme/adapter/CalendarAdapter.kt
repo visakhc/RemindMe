@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.remindme.R
 import com.app.remindme.data.model.CalenderModel
+import com.app.remindme.data.model.EventsDayModel
 import com.app.remindme.databinding.ItemCalenderBinding
 import com.app.remindme.utils.USERDATA.thisDay
 import com.app.remindme.utils.USERDATA.thisMonth
@@ -14,6 +15,7 @@ class CalendarAdapter(private var listener: OnClickListener) :
     RecyclerView.Adapter<CalendarAdapter.MyViewHolder>() {
     private var mMonth: Int = -1
     private var localList: MutableList<CalenderModel> = mutableListOf()
+    private var eventsLocalList: MutableList<EventsDayModel> = mutableListOf()
 
     inner class MyViewHolder(val binding: ItemCalenderBinding) :
         RecyclerView.ViewHolder(binding.root) {}
@@ -33,15 +35,17 @@ class CalendarAdapter(private var listener: OnClickListener) :
 
     override fun onBindViewHolder(holder: CalendarAdapter.MyViewHolder, position: Int) {
         with(localList[position]) {
-       //     holder.binding.tvEventEmojis.text = emoji
+            //     holder.binding.tvEventEmojis.text = emoji
             holder.binding.tvDate.text = date.toString()
             holder.binding.tvDay.text = day
+            holder.binding.tvEventEmojis.text = emoji
             if ((position + 1) == thisDay && mMonth == thisMonth) {
                 holder.binding.cardView.setBackgroundResource(R.drawable.shape_border)
             }
             holder.itemView.setOnClickListener {
                 listener.onItemClick(this)
             }
+
         }
     }
 
@@ -54,6 +58,12 @@ class CalendarAdapter(private var listener: OnClickListener) :
         localList.clear()
         localList.addAll(list)
         notifyDataSetChanged()
+    }
+
+    fun updateListWithEvents(month: Int, pos: Int, emoji: String) {
+        mMonth = month
+        localList[pos-1].emoji = emoji
+        notifyItemChanged(pos-1)
     }
 
     interface OnClickListener {

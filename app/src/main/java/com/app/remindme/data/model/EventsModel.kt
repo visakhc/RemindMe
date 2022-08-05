@@ -12,5 +12,9 @@ data class EventsModel(
     val description: String,
     val emoji: String = "",
     @PrimaryKey(autoGenerate = true) var id: Int? = null
+)
 
+data class EventsDayModel(
+    val day: Int,
+    val emoji: String = "",
 )

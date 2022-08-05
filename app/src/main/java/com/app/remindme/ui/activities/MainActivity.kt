@@ -11,14 +11,12 @@ import com.app.remindme.R
 import com.app.remindme.adapter.CalendarAdapter
 import com.app.remindme.bottomsheets.EventsBottomSheet
 import com.app.remindme.data.model.CalenderModel
-import com.app.remindme.data.model.EventsModel
 import com.app.remindme.databinding.ActivityMainBinding
 import com.app.remindme.ui.viewmodel.EventsViewModel
 import com.app.remindme.utils.USERDATA
 import com.app.remindme.utils.USERDATA.thisMonth
 import com.app.remindme.utils.getDayFormatted
 import com.app.remindme.utils.hide
-import com.app.remindme.utils.logThis
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
@@ -27,7 +25,7 @@ import java.util.*
 
 class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
 
-    private var eventList = emptyList<EventsModel>()
+    private var calendarList = emptyList<CalenderModel>()
     private var mMonth: Int = -1
     private var mYear: Int = -1
     private var binding: ActivityMainBinding? = null
@@ -43,10 +41,8 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
 
         init()
         initViews()
-        roomDB()
         setCalendarView()
-
-        handleEvents()
+         handleEvents()
     }
 
     private fun init() {
@@ -82,16 +78,15 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
     }
 
     private fun setCalendarView() {
-        val data = calendarBuilder(mMonth, mYear)
-        mAdapter.updateList(mMonth, data)
-    }
-
-    private fun roomDB() {
-        viewModel.readAllData.observe(this@MainActivity) {
-            eventList = it
-            logThis("eventList: $eventList")
+        calendarList = calendarBuilder(mMonth, mYear)
+        mAdapter.updateList(mMonth, calendarList)
+        viewModel.findEventDayInMonth(mMonth, mYear).observe(this) {
+            it?.forEach { item ->
+                mAdapter.updateListWithEvents(mMonth, item.day, item.emoji)
+            }
         }
     }
+
 
     private fun calendarBuilder(month: Int, year: Int): MutableList<CalenderModel> {
         val dayList = mutableListOf<CalenderModel>()
