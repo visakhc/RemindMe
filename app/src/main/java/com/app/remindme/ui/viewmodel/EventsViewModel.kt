@@ -3,7 +3,6 @@ package com.app.remindme.ui.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.remindme.data.database.DatabaseBuilder
 import com.app.remindme.data.database.Repository
@@ -35,11 +34,7 @@ class EventsViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun findEvent(date: Int, month: Int, year: Int): EventsModel?{
-         var ls:  EventsModel? = null
-        viewModelScope.launch(Dispatchers.IO) {
-            ls = repository.findEvent(date, month, year)
-        }
-        return ls
+    fun findEvent(date: Int, month: Int, year: Int): LiveData<List<EventsModel>> {
+        return repository.findEvent(date, month, year)
     }
 }

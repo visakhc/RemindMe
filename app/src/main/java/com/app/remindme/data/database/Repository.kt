@@ -1,6 +1,5 @@
 package com.app.remindme.data.database
 
-import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import com.app.remindme.data.model.EventsModel
 
@@ -16,13 +15,8 @@ class Repository(private val userDao: Dao) {
         userDao.deleteUser(id)
     }
 
-    @WorkerThread
-    suspend fun findEvent(date: Int, month: Int, year: Int): EventsModel{
-        try {
-            userDao.findEvent(/*date*//*, month, year*/)
-        }catch (e: Exception){
-            e.printStackTrace()
-        }
-        return userDao.findEvent(/*date*//*, month, year*/)
+     fun findEvent(date: Int, month: Int, year: Int): LiveData<List<EventsModel>> {
+        return userDao.findEvent(date, month, year)
+
     }
 }

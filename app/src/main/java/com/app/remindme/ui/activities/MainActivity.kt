@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
 
     private fun init() {
         viewModel = ViewModelProvider(this)[EventsViewModel::class.java]
-        mMonth = USERDATA.thisMonth
+        mMonth = thisMonth
         mYear = USERDATA.thisYear
     }
 
@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
             cal.set(year, month, i)
             val dayInWords = getDayFormatted("EEEE", cal)
 
-          dayList.add(CalenderModel(i, dayInWords))
+            dayList.add(CalenderModel(i, dayInWords))
         }
         return dayList
     }
@@ -144,11 +144,12 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
 
     override fun onItemClick(item: CalenderModel) {
         val eBSheet = EventsBottomSheet()
-        /*  eBSheet.arguments = Bundle().apply {
-              putParcelable("data", item)
-          }*/
+        eBSheet.arguments = Bundle().apply {
+            putInt("day", item.date)
+            putInt("month", mMonth)
+            putInt("year", mYear)
+        }
         eBSheet.show(supportFragmentManager, "events")
-        logThis("${item.date}, $mMonth, $mYear")
-       logThis(viewModel.findEvent(item.date, mMonth, mYear))
+
     }
 }

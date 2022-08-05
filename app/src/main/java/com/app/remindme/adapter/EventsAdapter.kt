@@ -1,19 +1,16 @@
 package com.app.remindme.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.app.remindme.databinding.ItemEventsBinding
 import com.app.remindme.data.model.EventsModel
+import com.app.remindme.databinding.ItemEventsBinding
 
-class EventsAdapter(private val itemList: List<EventsModel>, context: Context) :
-    RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {
-    val ctxt = context
+class EventsAdapter : RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {
+    private val itemList = mutableListOf<EventsModel>()
 
-    inner class MyViewHolder(val binding: ItemEventsBinding)
-        : RecyclerView.ViewHolder(binding.root)  {
+    inner class MyViewHolder(val binding: ItemEventsBinding) :
+        RecyclerView.ViewHolder(binding.root) {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -30,12 +27,14 @@ class EventsAdapter(private val itemList: List<EventsModel>, context: Context) :
         with(itemList[position]) {
             holder.binding.tvTitle.text = title
             holder.binding.tvDesc.text = description
-
-            holder.binding.root.setOnClickListener {
-                Toast.makeText(ctxt, (position + 1).toString(), Toast.LENGTH_SHORT).show()
-
-            }
+            holder.binding.tvEventEmojis.text = emoji
         }
+    }
+
+    fun updateList(list: List<EventsModel>) {
+        itemList.clear()
+        itemList.addAll(list)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {

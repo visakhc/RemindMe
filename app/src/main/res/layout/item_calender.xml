@@ -17,6 +17,7 @@
         <TextView
             android:id="@+id/tvEventEmojis"
             android:layout_width="0dp"
+            android:singleLine="true"
             android:layout_height="wrap_content"
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
