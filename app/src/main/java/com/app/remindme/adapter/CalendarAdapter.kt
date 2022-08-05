@@ -15,7 +15,6 @@ class CalendarAdapter(private var listener: OnClickListener) :
     RecyclerView.Adapter<CalendarAdapter.MyViewHolder>() {
     private var mMonth: Int = -1
     private var localList: MutableList<CalenderModel> = mutableListOf()
-    private var eventsLocalList: MutableList<EventsDayModel> = mutableListOf()
 
     inner class MyViewHolder(val binding: ItemCalenderBinding) :
         RecyclerView.ViewHolder(binding.root) {}
@@ -35,7 +34,6 @@ class CalendarAdapter(private var listener: OnClickListener) :
 
     override fun onBindViewHolder(holder: CalendarAdapter.MyViewHolder, position: Int) {
         with(localList[position]) {
-            //     holder.binding.tvEventEmojis.text = emoji
             holder.binding.tvDate.text = date.toString()
             holder.binding.tvDay.text = day
             holder.binding.tvEventEmojis.text = emoji

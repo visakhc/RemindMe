@@ -96,7 +96,6 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
         for (i in 1..maxDayOfMonth) {
             cal.set(year, month, i)
             val dayInWords = getDayFormatted("EEEE", cal)
-
             dayList.add(CalenderModel(i, dayInWords))
         }
         return dayList
