@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
         init()
         initViews()
         setCalendarView()
-         handleEvents()
+        handleEvents()
     }
 
     private fun init() {
@@ -103,6 +103,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
 
 
     private fun showMenu(v: View, @MenuRes menuRes: Int) {
+        //todo change this to more lite way
         val popup = PopupMenu(this@MainActivity, v)
         popup.menuInflater.inflate(menuRes, popup.menu)
         popup.setOnMenuItemClickListener {
@@ -144,6 +145,5 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
             putInt("year", mYear)
         }
         eBSheet.show(supportFragmentManager, "events")
-
     }
 }

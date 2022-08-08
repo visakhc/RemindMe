@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.remindme.R
 import com.app.remindme.data.model.CalenderModel
-import com.app.remindme.data.model.EventsDayModel
 import com.app.remindme.databinding.ItemCalenderBinding
 import com.app.remindme.utils.USERDATA.thisDay
 import com.app.remindme.utils.USERDATA.thisMonth
@@ -37,6 +36,7 @@ class CalendarAdapter(private var listener: OnClickListener) :
             holder.binding.tvDate.text = date.toString()
             holder.binding.tvDay.text = day
             holder.binding.tvEventEmojis.text = emoji
+            if (emoji.length > 4) holder.binding.tvEventEmojis.isSelected = true
             if ((position + 1) == thisDay && mMonth == thisMonth) {
                 holder.binding.cardView.setBackgroundResource(R.drawable.shape_border)
             }
@@ -60,8 +60,8 @@ class CalendarAdapter(private var listener: OnClickListener) :
 
     fun updateListWithEvents(month: Int, pos: Int, emoji: String) {
         mMonth = month
-        localList[pos-1].emoji = emoji
-        notifyItemChanged(pos-1)
+        localList[pos - 1].emoji = emoji
+        notifyItemChanged(pos - 1)
     }
 
     interface OnClickListener {

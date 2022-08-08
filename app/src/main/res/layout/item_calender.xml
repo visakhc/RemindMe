@@ -17,12 +17,14 @@
         <TextView
             android:id="@+id/tvEventEmojis"
             style="@style/normalTextSemiBold"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:layout_marginTop="2dp"
+             android:layout_marginTop="2dp"
             android:layout_marginStart="5dp"
             android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
