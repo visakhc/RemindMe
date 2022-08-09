@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.remindme.data.model.EventsModel
 import com.app.remindme.databinding.ItemEventsBinding
+import com.app.remindme.utils.logThis
 
 class EventsAdapter : RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {
     private val itemList = mutableListOf<EventsModel>()
@@ -25,9 +26,11 @@ class EventsAdapter : RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         with(itemList[position]) {
+            logThis(this)
             holder.binding.tvTitle.text = title
             holder.binding.tvDesc.text = description
             holder.binding.tvEventEmojis.text = emoji
+            if (emoji.length > 4) holder.binding.tvEventEmojis.isSelected = true
         }
     }
 

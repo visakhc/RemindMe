@@ -1,4 +1,4 @@
-package com.app.remindme.bottomsheets
+package com.app.remindme.ui.bottomsheets
 
 import android.content.Intent
 import android.os.Bundle
@@ -46,9 +46,13 @@ class EventsBottomSheet : BottomSheetDialogFragment() {
         handleEvents()
     }
 
-    private fun getEvents() {
-        viewModel.findEvent(date, month, year).observe(this) {
-            recyclerAdapter.updateList(it)
+
+
+    private fun init() {
+        arguments?.let {
+            date = it.getInt("day")
+            month = it.getInt("month")
+            year = it.getInt("year")
         }
     }
 
@@ -60,12 +64,9 @@ class EventsBottomSheet : BottomSheetDialogFragment() {
         }
     }
 
-
-    private fun init() {
-        arguments?.let {
-            date = it.getInt("day")
-            month = it.getInt("month")
-            year = it.getInt("year")
+    private fun getEvents() {
+        viewModel.findEvent(date, month, year).observe(this) {
+            recyclerAdapter.updateList(it)
         }
     }
 

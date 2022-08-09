@@ -9,7 +9,7 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.ViewModelProvider
 import com.app.remindme.R
 import com.app.remindme.adapter.CalendarAdapter
-import com.app.remindme.bottomsheets.EventsBottomSheet
+import com.app.remindme.ui.bottomsheets.EventsBottomSheet
 import com.app.remindme.data.model.CalenderModel
 import com.app.remindme.databinding.ActivityMainBinding
 import com.app.remindme.ui.viewmodel.EventsViewModel

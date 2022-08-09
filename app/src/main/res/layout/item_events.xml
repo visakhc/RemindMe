@@ -16,16 +16,18 @@
 
     <TextView
         android:id="@+id/tvEventEmojis"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:textSize="@dimen/_14ssp"
-        android:gravity="center"
-        android:maxLength="1"
+        style="@style/normalTextSemiBold"
+        android:layout_width="@dimen/_35sdp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginStart="5dp"
         android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toTopOf="parent"  />
     <TextView
         android:id="@+id/tv_title"
         style="@style/normalTextRegular"

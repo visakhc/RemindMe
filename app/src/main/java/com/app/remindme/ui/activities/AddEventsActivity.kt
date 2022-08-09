@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.app.remindme.data.model.EventsModel
 import com.app.remindme.databinding.ActivityAddEventsBinding
 import com.app.remindme.ui.viewmodel.EventsViewModel
+import com.app.remindme.utils.shortToast
 
 class AddEvents : AppCompatActivity() {
     private lateinit var viewModel: EventsViewModel
@@ -34,15 +35,25 @@ class AddEvents : AppCompatActivity() {
             onBackPressed()
         }
         binding?.btSave?.setOnClickListener {
-            val day = binding?.datePicker?.dayOfMonth!!
-            val month = binding?.datePicker?.month!!
-            val year = binding?.datePicker?.year!!
-            val title = binding?.etTitle?.text.toString()
-            val desc = binding?.etDesc?.text.toString()
-            val emoji = binding?.etEmoji?.text.toString()
-
-            viewModel.addEvent(EventsModel(day, month, year, title, desc, emoji))
+            onBackPressed()
         }
     }
 
+    override fun onBackPressed() {
+        val day = binding?.datePicker?.dayOfMonth!!
+        val month = binding?.datePicker?.month!!
+        val year = binding?.datePicker?.year!!
+        val title = binding?.etTitle?.text.toString()
+        val desc = binding?.etDesc?.text.toString()
+        val emoji = binding?.etEmoji?.text.toString()
+
+        viewModel.addEvent(EventsModel(day, month, year, title, desc, emoji))
+
+        binding?.etEmoji?.text?.clear()
+        binding?.etTitle?.text?.clear()
+        binding?.etDesc?.text?.clear()
+
+        shortToast("Event added!")
+        super.onBackPressed()
+    }
 }
