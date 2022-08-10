@@ -28,12 +28,22 @@ class AddEvents : AppCompatActivity() {
 
     private fun initViews() {
         binding?.inclLayout?.tvTitle?.text = "Add Events"
+
         val year = intent.getIntExtra("year", -1)
         val month = intent.getIntExtra("month", -1)
         val day = intent.getIntExtra("day", -1)
+
         if (year != -1 && month != -1 && day != -1) {
             binding?.datePicker?.updateDate(year, month, day)
         }
+
+        val title = intent.getStringExtra("title") ?: ""
+        val description = intent.getStringExtra("description") ?: ""
+        val emoji = intent.getStringExtra("emoji") ?: ""
+
+        binding?.etTitle?.setText(title)
+        binding?.etDesc?.setText(description)
+        binding?.etEmoji?.setText(emoji)
     }
 
     private fun handleEvents() {
@@ -54,11 +64,20 @@ class AddEvents : AppCompatActivity() {
             val day = binding?.datePicker?.dayOfMonth!!
             val month = binding?.datePicker?.month!!
             val year = binding?.datePicker?.year!!
-            viewModel.addEvent(EventsModel(day, month, year, title, desc, emoji))
-            binding?.etEmoji?.text?.clear()
-            binding?.etTitle?.text?.clear()
-            binding?.etDesc?.text?.clear()
-            shortToast("Event added!")
+            val id = intent.getIntExtra("id", -11)
+
+            if (intent.action == "edit" && id != -11) {
+                if (title != intent.getStringExtra("title") ||
+                    desc != intent.getStringExtra("description") ||
+                    emoji != intent.getStringExtra("emoji")
+                ) {
+                    viewModel.updateEvent(id = id, title = title, description = desc, emoji = emoji)
+                    shortToast("Event updated")
+                }
+            } else {
+                viewModel.addEvent(EventsModel(day, month, year, title, desc, emoji))
+                shortToast("Event added")
+            }
         }
 
         super.onBackPressed()

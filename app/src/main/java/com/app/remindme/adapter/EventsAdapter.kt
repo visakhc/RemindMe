@@ -7,7 +7,8 @@ import com.app.remindme.data.model.EventsModel
 import com.app.remindme.databinding.ItemEventsBinding
 import com.app.remindme.utils.logThis
 
-class EventsAdapter : RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {
+class EventsAdapter(val listener: ItemClickListener) :
+    RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {
     private val itemList = mutableListOf<EventsModel>()
 
     inner class MyViewHolder(val binding: ItemEventsBinding) :
@@ -31,6 +32,9 @@ class EventsAdapter : RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {
             holder.binding.tvDesc.text = description
             holder.binding.tvEventEmojis.text = emoji
             if (emoji.length > 4) holder.binding.tvEventEmojis.isSelected = true
+            holder.itemView.setOnClickListener {
+                listener.onItemClick(this)
+            }
         }
     }
 
@@ -43,4 +47,8 @@ class EventsAdapter : RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {
     override fun getItemCount(): Int {
         return itemList.size
     }
+}
+
+interface ItemClickListener {
+    fun onItemClick(eventsModel: EventsModel)
 }

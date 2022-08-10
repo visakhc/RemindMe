@@ -9,18 +9,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.remindme.R
 import com.app.remindme.adapter.EventsAdapter
+import com.app.remindme.adapter.ItemClickListener
+import com.app.remindme.data.model.EventsModel
 import com.app.remindme.databinding.BottomSheetLayoutBinding
 import com.app.remindme.ui.activities.AddEvents
 import com.app.remindme.ui.viewmodel.EventsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class EventsBottomSheet : BottomSheetDialogFragment() {
+class EventsBottomSheet : BottomSheetDialogFragment(), ItemClickListener {
     private var binding: BottomSheetLayoutBinding? = null
     private lateinit var viewModel: EventsViewModel
     private var date = -1
     private var month = -1
     private var year = -1
-    private val recyclerAdapter by lazy { EventsAdapter() }
+    private val recyclerAdapter by lazy { EventsAdapter(this) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,13 +49,12 @@ class EventsBottomSheet : BottomSheetDialogFragment() {
     }
 
 
-
     private fun init() {
         arguments?.let {
             date = it.getInt("day")
             month = it.getInt("month")
             year = it.getInt("year")
-         }
+        }
     }
 
     private fun initViews() {
@@ -70,6 +71,7 @@ class EventsBottomSheet : BottomSheetDialogFragment() {
         }
     }
 
+    //todo add reminder for events
     private fun handleEvents() {
         binding?.ivAdd?.setOnClickListener {
             val intent = Intent(requireContext(), AddEvents::class.java)
@@ -78,5 +80,18 @@ class EventsBottomSheet : BottomSheetDialogFragment() {
             intent.putExtra("year", year)
             startActivity(intent)
         }
+    }
+
+    override fun onItemClick(eventsModel: EventsModel) {
+        val intent = Intent(requireContext(), AddEvents::class.java)
+        intent.action = "edit"
+        intent.putExtra("day", date)
+        intent.putExtra("month", month)
+        intent.putExtra("year", year)
+        intent.putExtra("title", eventsModel.title)
+        intent.putExtra("description", eventsModel.description)
+        intent.putExtra("emoji", eventsModel.emoji)
+        intent.putExtra("id", eventsModel.id)
+        startActivity(intent)
     }
 }

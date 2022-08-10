@@ -17,7 +17,10 @@ interface Dao {
     fun readAllData(): LiveData<List<EventsModel>>
 
     @Query("DELETE FROM user_table")
-    fun deleteAll( )
+    fun deleteAll()
+
+    @Query("UPDATE user_table SET title = :title, description = :description,emoji =:emoji WHERE id = :id")
+    fun updateEvent(id: Int, title: String, description: String, emoji: String)
 
     @Query("SELECT * FROM user_table WHERE day = :date AND month = :month AND year = :year")
     fun findEvent(date: Int, month: Int, year: Int): LiveData<List<EventsModel>>
