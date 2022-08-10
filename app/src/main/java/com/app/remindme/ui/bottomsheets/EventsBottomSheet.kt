@@ -53,11 +53,11 @@ class EventsBottomSheet : BottomSheetDialogFragment() {
             date = it.getInt("day")
             month = it.getInt("month")
             year = it.getInt("year")
-        }
+         }
     }
 
     private fun initViews() {
-        binding?.tvDate?.text = "${date}/${month}/${year}"
+        binding?.tvDate?.text = "${date}/${month + 1}/${year}"
         binding?.rvAlert?.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = recyclerAdapter
@@ -73,6 +73,9 @@ class EventsBottomSheet : BottomSheetDialogFragment() {
     private fun handleEvents() {
         binding?.ivAdd?.setOnClickListener {
             val intent = Intent(requireContext(), AddEvents::class.java)
+            intent.putExtra("day", date)
+            intent.putExtra("month", month)
+            intent.putExtra("year", year)
             startActivity(intent)
         }
     }
