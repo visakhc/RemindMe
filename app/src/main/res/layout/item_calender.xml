@@ -4,6 +4,7 @@
     android:id="@+id/cardView"
     android:layout_width="@dimen/_65sdp"
     android:layout_height="@dimen/_65sdp"
+    app:rippleColor="#2003A9F4"
     android:layout_marginHorizontal="@dimen/_4sdp"
     android:layout_marginVertical="@dimen/_4sdp"
     android:outlineSpotShadowColor="#03A9F4"
