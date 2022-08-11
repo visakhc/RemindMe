@@ -1,5 +1,6 @@
 package com.app.remindme.ui.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -9,9 +10,9 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.ViewModelProvider
 import com.app.remindme.R
 import com.app.remindme.adapter.CalendarAdapter
-import com.app.remindme.ui.bottomsheets.EventsBottomSheet
 import com.app.remindme.data.model.CalenderModel
 import com.app.remindme.databinding.ActivityMainBinding
+import com.app.remindme.ui.bottomsheets.EventsBottomSheet
 import com.app.remindme.ui.viewmodel.EventsViewModel
 import com.app.remindme.utils.USERDATA
 import com.app.remindme.utils.USERDATA.thisMonth
@@ -22,7 +23,7 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import java.util.*
 
-
+@SuppressLint("ClickableViewAccessibility")
 class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
 
     private var calendarList = emptyList<CalenderModel>()
@@ -75,7 +76,37 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
         binding?.tvMonth?.setOnClickListener {
             showMenu(it, R.menu.menu)
         }
+
+        /*  binding?.tvMonth?.setOnTouchListener(object : OnSwipeTouchListener(this@MainActivity) {
+              override fun onSwipeTop() {
+                  swipedToCal(mMonth--)
+
+              }
+
+              override fun onSwipeRight() {
+                  swipedToCal(mMonth--)
+
+              }
+
+              override fun onSwipeLeft() {
+                  swipedToCal(mMonth++)
+
+              }
+
+              override fun onSwipeBottom() {
+                  swipedToCal(mMonth++)
+              }
+          })*/
+
     }
+/*
+    private fun swipedToCal(mMonth: Int) {
+        val cal = Calendar.getInstance()
+        cal.set(mYear, mMonth, 4)
+        binding?.tvMonth?.text = getDayFormatted("MMMM", cal)
+        binding?.tvDay?.text = if (mMonth == thisMonth) getDayFormatted("EEEE") else ""
+        setCalendarView()
+    }*/
 
     private fun setCalendarView() {
         calendarList = calendarBuilder(mMonth, mYear)
