@@ -1,66 +1,70 @@
 package com.app.remindme.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.app.remindme.R
-import com.app.remindme.model.CalenderModel
-import java.util.*
+import com.app.remindme.data.model.CalenderModel
+import com.app.remindme.databinding.ItemCalenderBinding
+import com.app.remindme.utils.USERDATA.thisDay
+import com.app.remindme.utils.USERDATA.thisMonth
 
 
-class CalendarAdapter(
-    private val itemList: List<CalenderModel>,
-    private  val mMonth: Int,
-    private var mOnEachListener: OnEachListener,
-) :
-    RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
-    val today = Calendar.getInstance().get(Calendar.DATE)
-    val thisMonth = Calendar.getInstance().get(Calendar.MONTH)
+class CalendarAdapter(private var listener: OnClickListener) :
+    RecyclerView.Adapter<CalendarAdapter.MyViewHolder>() {
+    private var mMonth: Int = -1
+    private var localList: MutableList<CalenderModel> = mutableListOf()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_calender, parent, false)
-        return ViewHolder(view, mOnEachListener)
+    inner class MyViewHolder(val binding: ItemCalenderBinding) :
+        RecyclerView.ViewHolder(binding.root) {}
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): CalendarAdapter.MyViewHolder {
+        return MyViewHolder(
+            ItemCalenderBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
+    }
+
+    override fun onBindViewHolder(holder: CalendarAdapter.MyViewHolder, position: Int) {
+        with(localList[position]) {
+            holder.binding.tvDate.text = date.toString()
+            holder.binding.tvDay.text = day
+            holder.binding.tvEventEmojis.text = emoji
+            if (emoji.length > 4) holder.binding.tvEventEmojis.isSelected = true
+            if ((position + 1) == thisDay && mMonth == thisMonth) {
+                holder.binding.cardView.setBackgroundResource(R.drawable.shape_border)
+            }
+            holder.itemView.setOnClickListener {
+                listener.onItemClick(this)
+            }
+
+        }
     }
 
     override fun getItemCount(): Int {
-        return itemList.size
+        return localList.size
     }
 
-    class ViewHolder(itemView: View, OnEachListener: OnEachListener) :
-        RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        var mName: TextView
-        var mNum: TextView
-        var d: CardView
-        var OnEachListener: OnEachListener
-        override fun onClick(v: View) {
-            OnEachListener.OnEachClick(adapterPosition)
-        }
-
-        init {
-            mName = itemView.findViewById(R.id.tv_date)
-            mNum = itemView.findViewById(R.id.tv_day)
-            d = itemView.findViewById(R.id.cardView)
-            this.OnEachListener = OnEachListener
-            itemView.setOnClickListener(this)
-        }
+    fun updateList(month: Int, list: List<CalenderModel>) {
+        mMonth = month
+        localList.clear()
+        localList.addAll(list)
+        notifyDataSetChanged()
     }
 
-    interface OnEachListener {
-        fun OnEachClick(position: Int)
+    fun updateListWithEvents(month: Int, pos: Int, emoji: String) {
+        mMonth = month
+        localList[pos - 1].emoji = emoji
+        notifyItemChanged(pos - 1)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        with(itemList[position]) {
-            holder.mName.text = date
-            holder.mNum.text = day
-        }
-
-        if ((position+1) == today && thisMonth == mMonth ) {
-            holder.d.setBackgroundResource(R.drawable.shape_border)
-        }
+    interface OnClickListener {
+        fun onItemClick(item: CalenderModel)
     }
 }

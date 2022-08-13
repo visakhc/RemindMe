@@ -1,19 +1,18 @@
 package com.app.remindme.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.app.remindme.data.model.EventsModel
 import com.app.remindme.databinding.ItemEventsBinding
-import com.app.remindme.model.EventsModel
+import com.app.remindme.utils.logThis
 
-class EventsAdapter(private val itemList: List<EventsModel>, context: Context) :
+class EventsAdapter(val listener: ItemClickListener) :
     RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {
-    val ctxt = context
+    private val itemList = mutableListOf<EventsModel>()
 
-    inner class MyViewHolder(val binding: ItemEventsBinding)
-        : RecyclerView.ViewHolder(binding.root)  {
+    inner class MyViewHolder(val binding: ItemEventsBinding) :
+        RecyclerView.ViewHolder(binding.root) {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -28,17 +27,28 @@ class EventsAdapter(private val itemList: List<EventsModel>, context: Context) :
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         with(itemList[position]) {
+            logThis(this)
             holder.binding.tvTitle.text = title
             holder.binding.tvDesc.text = description
-
-            holder.binding.root.setOnClickListener {
-                Toast.makeText(ctxt, (position + 1).toString(), Toast.LENGTH_SHORT).show()
-
+            holder.binding.tvEventEmojis.text = emoji
+            if (emoji.length > 4) holder.binding.tvEventEmojis.isSelected = true
+            holder.itemView.setOnClickListener {
+                listener.onItemClick(this)
             }
         }
+    }
+
+    fun updateList(list: List<EventsModel>) {
+        itemList.clear()
+        itemList.addAll(list)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
         return itemList.size
     }
+}
+
+interface ItemClickListener {
+    fun onItemClick(eventsModel: EventsModel)
 }

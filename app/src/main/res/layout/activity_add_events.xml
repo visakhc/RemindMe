@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddEvents">
+    tools:context=".ui.activities.AddEvents">
 
     <include
         android:id="@+id/incl_layout"
@@ -13,74 +13,92 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/drop_event"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Event Type"
-        app:hintTextColor="@color/black"
-        app:boxStrokeColor="@color/dodger_blue"
-        android:layout_marginTop="@dimen/_100sdp"
-        android:layout_marginHorizontal="@dimen/_50sdp"
-        app:layout_constraintStart_toStartOf="parent"
+    <DatePicker
+        android:id="@+id/datePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_120sdp"
+        android:layout_gravity="center"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        android:layout_marginTop="@dimen/_20sdp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/incl_layout"
-        >
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etEmoji" />
 
-        <AutoCompleteTextView
-            android:layout_width="match_parent"
-            android:id="@+id/tv_event_type"
-            android:text="Event"
-            android:layout_height="wrap_content"
-            android:inputType="none"
-            />
-
-    </com.google.android.material.textfield.TextInputLayout>
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_120sdp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:timePickerMode="spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/datePicker" />
 
     <EditText
         android:id="@+id/et_title"
+        style="@style/normalTextMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_30sdp"
-        android:layout_marginHorizontal="@dimen/_50sdp"
+        android:layout_marginHorizontal="@dimen/_18sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:gravity="center"
         android:hint="event title"
-        android:inputType="text|textAutoComplete|textAutoCorrect"
-        android:textColor="@color/black"
+        android:background="@drawable/shape_edittext"
+        android:inputType="text|textAutoComplete|textAutoCorrect|textMultiLine"
+        android:paddingVertical="@dimen/_9sdp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.623"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/drop_event" />
+        app:layout_constraintTop_toBottomOf="@+id/incl_layout" />
 
     <EditText
         android:id="@+id/et_desc"
+        style="@style/normalTextMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_50sdp"
-        android:layout_marginTop="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginHorizontal="@dimen/_18sdp"
+        android:gravity="center"
         android:hint="event description"
-        android:inputType="text|textAutoComplete|textAutoCorrect"
-        android:textColor="@color/black"
+        android:background="@drawable/shape_edittext"
+        android:inputType="text|textAutoComplete|textAutoCorrect|textMultiLine"
+        android:paddingVertical="@dimen/_9sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_title" />
+
+    <EditText
+        android:id="@+id/etEmoji"
+        style="@style/normalTextMedium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_18sdp"
+        android:gravity="center"
+        android:hint="priority emoji"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/shape_edittext"
+        android:paddingVertical="@dimen/_9sdp"
+        android:inputType="text|textAutoComplete|textAutoCorrect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_desc" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/bt_save"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_105sdp"
+        android:paddingHorizontal="@dimen/_50sdp"
+        android:paddingVertical="@dimen/_9sdp"
+        android:textColor="@color/black"
         android:text="Save Event"
-        app:elevation="@dimen/_10sdp"
         android:textAllCaps="false"
-        android:paddingHorizontal="@dimen/_20sdp"
-        app:cornerRadius="@dimen/_15sdp"
+        app:cornerRadius="@dimen/_8sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timePicker"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_desc" />
-
+        app:layout_constraintVertical_bias="0.8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

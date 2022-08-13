@@ -4,6 +4,7 @@
     android:id="@+id/cardView"
     android:layout_width="@dimen/_65sdp"
     android:layout_height="@dimen/_65sdp"
+    app:rippleColor="#2003A9F4"
     android:layout_marginHorizontal="@dimen/_4sdp"
     android:layout_marginVertical="@dimen/_4sdp"
     android:outlineSpotShadowColor="#03A9F4"
@@ -15,25 +16,40 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/tvEventEmojis"
+            style="@style/normalTextSemiBold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+             android:layout_marginTop="2dp"
+            android:layout_marginStart="5dp"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/tv_date"
             style="@style/largeTextSemiBold"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:textAlignment="center"
             android:paddingTop="@dimen/_10sdp"
             android:text="30"
+            android:textAlignment="center"
             app:layout_constraintBottom_toTopOf="@+id/guideline2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/tv_day"
+            style="@style/smallTextRegular"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="@dimen/_10sdp"
             android:gravity="center"
             android:text="DAY"
-            style="@style/smallTextRegular"
             android:textColor="@color/dark_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
