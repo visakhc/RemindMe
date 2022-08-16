@@ -1,6 +1,7 @@
 package com.app.remindme.data.database
 
 import androidx.lifecycle.LiveData
+import com.app.remindme.data.model.CalendarModel
 import com.app.remindme.data.model.EventsDayModel
 import com.app.remindme.data.model.EventsModel
 
@@ -9,7 +10,11 @@ class Repository(private val userDao: Dao) {
     val readAllData = userDao.readAllData()
 
     suspend fun addEvent(user: EventsModel) {
-        userDao.addUser(user)
+        userDao.addEvent(user)
+    }
+
+    suspend fun addCalendarData(calendar: CalendarModel) {
+        userDao.addCalendarData(calendar)
     }
 
     suspend fun deleteEvent() {
@@ -26,5 +31,9 @@ class Repository(private val userDao: Dao) {
 
     fun findEventDayInMonth(month: Int, year: Int): LiveData<List<EventsDayModel>> {
         return userDao.findEventDayInMonth(month, year)
+    }
+
+    fun getCalendarData(month: Int, year: Int): LiveData<List<CalendarModel>> {
+        return userDao.getCalendarData(month, year)
     }
 }

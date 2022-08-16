@@ -18,3 +18,19 @@ data class EventsDayModel(
     val day: Int,
     val emoji: String = "",
 )
+
+
+@Entity(tableName = "calendar_table")
+data class CalendarModel(
+    val date: Int,
+    val day: String,
+    val month: Int,
+    val year: Int,
+    var emoji: String = "",
+    @PrimaryKey(autoGenerate = true) var id: Int? = null
+)
+
+data class CalendarDataModel(
+    val day: String,
+    val date: Int,
+)
