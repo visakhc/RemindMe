@@ -59,11 +59,14 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
         binding?.btAddEvent?.hide() //for testing
         //  binding?.tvDay?.text = getDayFormatted("EEEE")
         //  binding?.tvMonth?.text = getDayFormatted("MMMM")
-        flexboxLayout.apply {
+        /*     flexboxLayout.apply {
+                 flexDirection = FlexDirection.ROW
+                 justifyContent = JustifyContent.SPACE_EVENLY
+             }*/
+        binding?.recyclerView?.layoutManager = flexboxLayout.apply {
             flexDirection = FlexDirection.ROW
             justifyContent = JustifyContent.SPACE_EVENLY
         }
-        binding?.recyclerView?.layoutManager = flexboxLayout
         binding?.recyclerView?.adapter = mAdapter
 /*      val months = resources.getStringArray(R.array.months_array)
         binding?.monthPicker?.apply {
@@ -140,7 +143,6 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
         }
     }
 
-
     private fun calendarBuilder(month: Int, year: Int): MutableList<CalendarModel> {
         val dayList = mutableListOf<CalendarModel>()
         val cal = Calendar.getInstance()
@@ -156,12 +158,11 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
                     month,
                     year
                 )
-            ) //try to send list as whole todo
+            )
         }
         viewModel.addCalendarData(dayList)
         return dayList
     }
-
 
     private fun showMenu(v: View, @MenuRes menuRes: Int) {
         //todo change this to more lite way
