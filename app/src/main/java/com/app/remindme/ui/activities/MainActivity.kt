@@ -8,6 +8,7 @@ import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.coroutineScope
 import com.app.remindme.R
 import com.app.remindme.adapter.CalendarAdapter
 import com.app.remindme.data.model.CalendarModel
@@ -18,10 +19,10 @@ import com.app.remindme.utils.USERDATA
 import com.app.remindme.utils.USERDATA.thisMonth
 import com.app.remindme.utils.getDayFormatted
 import com.app.remindme.utils.hide
-import com.app.remindme.utils.logThis
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import kotlinx.coroutines.launch
 import java.util.*
 
 @SuppressLint("ClickableViewAccessibility")
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
         setContentView(binding?.root)
 
         init()
+        // viewModel.deleteAllCalendarData()
         initViews()
         setCalendarView()
         handleEvents()
@@ -63,9 +65,8 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
         }
         binding?.recyclerView?.layoutManager = flexboxLayout
         binding?.recyclerView?.adapter = mAdapter
-        val months = resources.getStringArray(R.array.months_array)
-
-        binding?.unitPicker?.apply {
+/*      val months = resources.getStringArray(R.array.months_array)
+        binding?.monthPicker?.apply {
             minValue = 0
             maxValue = months.lastIndex
             displayedValues = months
@@ -77,13 +78,13 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
                 binding?.tvMonth?.text = months[pos]
                 setCalendarView()
             }
-            /*  for (i in data.indices) {
+          for (i in data.indices) {
                   if (selectedUnit == data[i]?.name) {
                       selectedUnitId = data[i]?.id.toString()
                       break
                   }
-              }*/
-        }
+              }
+        }*/
     }
 
     private fun handleEvents() {
@@ -95,7 +96,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
             val intent = Intent(this@MainActivity, AddEvents::class.java)
             startActivity(intent)
         }
-        binding?.unitPicker?.setOnClickListener {
+        binding?.monthPicker?.setOnClickListener {
             showMenu(it, R.menu.calendar_menu)
         }
 
@@ -121,22 +122,17 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
           })*/
 
     }
-/*
-    private fun swipedToCal(mMonth: Int) {
-        val cal = Calendar.getInstance()
-        cal.set(mYear, mMonth, 4)
-        binding?.tvMonth?.text = getDayFormatted("MMMM", cal)
-        binding?.tvDay?.text = if (mMonth == thisMonth) getDayFormatted("EEEE") else ""
-        setCalendarView()
-    }*/
 
     private fun setCalendarView() {
         val cal = Calendar.getInstance()
         cal.set(mYear, mMonth, 4)
         binding?.tvMonth?.text = getDayFormatted("MMMM", cal)
         binding?.tvDay?.text = if (mMonth == thisMonth) getDayFormatted("EEEE") else ""
-        calendarList = calendarBuilder(mMonth, mYear)
-        mAdapter.updateList(mMonth, calendarList)
+        lifecycle.coroutineScope.launch { //todo add splash screen to get time
+            val localCalendarData = viewModel.getCalendarData(mMonth, mYear)
+            calendarList = localCalendarData.ifEmpty { calendarBuilder(mMonth, mYear) }
+            mAdapter.updateList(mMonth, calendarList)
+        }
         viewModel.findEventDayInMonth(mMonth, mYear).observe(this) {
             it?.forEach { item ->
                 mAdapter.updateListWithEvents(mMonth, item.day, item.emoji)
@@ -146,28 +142,23 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
 
 
     private fun calendarBuilder(month: Int, year: Int): MutableList<CalendarModel> {
-        //build once and save it in a list or local db for quick access
         val dayList = mutableListOf<CalendarModel>()
-        viewModel.getCalendarData(mMonth, mYear).value?.let { dayList.addAll(it) }
-        logThis("logged  " + dayList.size)
-        if (dayList.isEmpty()) {
-            val cal = Calendar.getInstance()
-            cal.set(year, month, 1)
-            val maxDayOfMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
-            for (date in 1..maxDayOfMonth) {
-                cal.set(year, month, date)
-                val dayInWords = getDayFormatted("EEEE", cal)
-                dayList.add(
-                    CalendarModel(
-                        date,
-                        dayInWords,
-                        month,
-                        year
-                    )
-                ) //try to send list as whole todo
-                viewModel.addCalendarData(CalendarModel(date, dayInWords, month, year))
-            }
+        val cal = Calendar.getInstance()
+        cal.set(year, month, 1)
+        val maxDayOfMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
+        for (date in 1..maxDayOfMonth) {
+            cal.set(year, month, date)
+            val dayInWords = getDayFormatted("EEEE", cal)
+            dayList.add(
+                CalendarModel(
+                    date,
+                    dayInWords,
+                    month,
+                    year
+                )
+            ) //try to send list as whole todo
         }
+        viewModel.addCalendarData(dayList)
         return dayList
     }
 

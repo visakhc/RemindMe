@@ -58,7 +58,7 @@ class EventsBottomSheet : BottomSheetDialogFragment(), ItemClickListener {
     }
 
     private fun initViews() {
-        binding?.tvDate?.text = "${date}/${month + 1}/${year}"
+//        binding?.tvDate?.text = "${date}/${month + 1}/${year}"
         binding?.rvAlert?.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = recyclerAdapter

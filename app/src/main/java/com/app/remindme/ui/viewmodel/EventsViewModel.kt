@@ -31,7 +31,7 @@ class EventsViewModel(application: Application) : AndroidViewModel(application) 
     }
 
 
-    fun addCalendarData(calendar: CalendarModel) {
+    fun addCalendarData(calendar: MutableList<CalendarModel>) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addCalendarData(calendar)
         }
@@ -40,6 +40,12 @@ class EventsViewModel(application: Application) : AndroidViewModel(application) 
     fun deleteEvent() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteEvent()
+        }
+    }
+
+    fun deleteAllCalendarData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllCalendarData()
         }
     }
 
@@ -57,7 +63,10 @@ class EventsViewModel(application: Application) : AndroidViewModel(application) 
         return repository.findEventDayInMonth(month, year)
     }
 
-    fun getCalendarData(month: Int, year: Int): LiveData<List<CalendarModel>> {
+    /*  fun getCalendarData(month: Int, year: Int): LiveData<List<CalendarModel>> {
+          return repository.getCalendarData(month, year)
+      }*/
+    suspend fun getCalendarData(month: Int, year: Int): List<CalendarModel> {
         return repository.getCalendarData(month, year)
     }
 }

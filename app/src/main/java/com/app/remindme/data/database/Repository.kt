@@ -13,12 +13,16 @@ class Repository(private val userDao: Dao) {
         userDao.addEvent(user)
     }
 
-    suspend fun addCalendarData(calendar: CalendarModel) {
+    suspend fun addCalendarData(calendar: MutableList<CalendarModel>) {
         userDao.addCalendarData(calendar)
     }
 
     suspend fun deleteEvent() {
-        userDao.deleteAll()
+        userDao.deleteAllEvents()
+    }
+
+    suspend fun deleteAllCalendarData() {
+        userDao.deleteAllCalendarData()
     }
 
     suspend fun updateEvent(id: Int, title: String, description: String, emoji: String) {
@@ -33,7 +37,7 @@ class Repository(private val userDao: Dao) {
         return userDao.findEventDayInMonth(month, year)
     }
 
-    fun getCalendarData(month: Int, year: Int): LiveData<List<CalendarModel>> {
+    suspend fun getCalendarData(month: Int, year: Int): List<CalendarModel> {
         return userDao.getCalendarData(month, year)
     }
 }

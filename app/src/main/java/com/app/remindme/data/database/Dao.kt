@@ -15,13 +15,13 @@ interface Dao {
     suspend fun addEvent(eventsModel: EventsModel)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addCalendarData(eventsModel: CalendarModel)
+    suspend fun addCalendarData(eventsModel: MutableList<CalendarModel>)
 
     @Query("SELECT * FROM user_table ORDER BY id ASC")
     fun readAllData(): LiveData<List<EventsModel>>
 
     @Query("DELETE FROM user_table")
-    fun deleteAll()
+    fun deleteAllEvents()
 
     @Query("UPDATE user_table SET title = :title, description = :description,emoji =:emoji WHERE id = :id")
     fun updateEvent(id: Int, title: String, description: String, emoji: String)
@@ -33,6 +33,8 @@ interface Dao {
     fun findEventDayInMonth(month: Int, year: Int): LiveData<List<EventsDayModel>>
 
     @Query("SELECT * FROM calendar_table WHERE month = :month AND year = :year")
-    fun getCalendarData(month: Int, year: Int): LiveData<List<CalendarModel>>
+    suspend fun getCalendarData(month: Int, year: Int): List<CalendarModel>
 
+    @Query("DELETE FROM calendar_table")
+    fun deleteAllCalendarData()
 }
