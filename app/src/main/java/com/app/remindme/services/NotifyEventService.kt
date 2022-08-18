@@ -41,7 +41,7 @@ class NotifyEventService : BroadcastReceiver() {
                 Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
 
             val pendingIntent =
-                PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE)
+                PendingIntent.getActivity(this, 0, notificationIntent, 0)
 
             val mNotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             val mBuilder = NotificationCompat.Builder(context, default_notification_channel_id)
@@ -61,7 +61,7 @@ class NotifyEventService : BroadcastReceiver() {
                 mNotificationManager.createNotificationChannel(notificationChannel)
             }
             mNotificationManager.notify(System.currentTimeMillis().toInt(), mBuilder.build())
-            throw UnsupportedOperationException("Not yet implemented")
+            //  throw UnsupportedOperationException("Not yet implemented")
         }
     }
 }

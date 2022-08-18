@@ -14,6 +14,8 @@ import com.app.remindme.data.model.EventsModel
 import com.app.remindme.databinding.BottomSheetLayoutBinding
 import com.app.remindme.ui.activities.AddEvents
 import com.app.remindme.ui.viewmodel.EventsViewModel
+import com.app.remindme.utils.hide
+import com.app.remindme.utils.show
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class EventsBottomSheet : BottomSheetDialogFragment(), ItemClickListener {
@@ -67,7 +69,11 @@ class EventsBottomSheet : BottomSheetDialogFragment(), ItemClickListener {
 
     private fun getEvents() {
         viewModel.findEvent(date, month, year).observe(this) {
-            recyclerAdapter.updateList(it)
+            if (it.isNotEmpty()) {
+                recyclerAdapter.updateList(it)
+                binding?.tvNoEvents?.hide()
+            } else binding?.tvNoEvents?.show()
+
         }
     }
 

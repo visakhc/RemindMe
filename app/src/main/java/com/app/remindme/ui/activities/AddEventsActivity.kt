@@ -120,12 +120,12 @@ class AddEvents : AppCompatActivity() {
         intent.putExtra("description", description)
         val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
         val pendingIntent =
-            PendingIntent.getBroadcast(this@AddEvents, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.getBroadcast(this@AddEvents, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         val calendar = Calendar.getInstance()
-        calendar.set(year, month, date, hour, minute, 0)
+        //   calendar.set(year, month, date, hour, minute, 0)
         /*val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val test: String = sdf.format(calendar.time)
         logThis(test)*/
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis + 5000, pendingIntent)
     }
 }
