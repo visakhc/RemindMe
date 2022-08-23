@@ -18,9 +18,9 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_120sdp"
         android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_20sdp"
         android:calendarViewShown="false"
         android:datePickerMode="spinner"
-        android:layout_marginTop="@dimen/_20sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etEmoji" />
@@ -43,9 +43,9 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_18sdp"
         android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/shape_edittext"
         android:gravity="center"
         android:hint="event title"
-        android:background="@drawable/shape_edittext"
         android:inputType="text|textAutoComplete|textAutoCorrect|textMultiLine"
         android:paddingVertical="@dimen/_9sdp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,11 +57,11 @@
         style="@style/normalTextMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginHorizontal="@dimen/_18sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/shape_edittext"
         android:gravity="center"
         android:hint="event description"
-        android:background="@drawable/shape_edittext"
         android:inputType="text|textAutoComplete|textAutoCorrect|textMultiLine"
         android:paddingVertical="@dimen/_9sdp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,12 +74,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_18sdp"
-        android:gravity="center"
-        android:hint="priority emoji"
         android:layout_marginTop="@dimen/_10sdp"
         android:background="@drawable/shape_edittext"
-        android:paddingVertical="@dimen/_9sdp"
+        android:gravity="center"
+        android:hint="priority emoji"
         android:inputType="text|textAutoComplete|textAutoCorrect"
+        android:paddingVertical="@dimen/_9sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_desc" />
@@ -91,14 +91,125 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/_50sdp"
         android:paddingVertical="@dimen/_9sdp"
-        android:textColor="@color/black"
         android:text="Save Event"
         android:textAllCaps="false"
+        android:textColor="@color/black"
         app:cornerRadius="@dimen/_8sdp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timePicker"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timePicker"
         app:layout_constraintVertical_bias="0.8" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timePicker">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/normalTextRegular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Delete after event is over" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/swDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/_10sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/timePicker" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/normalTextRegular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Send Notification" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/notification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/_10sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/timePicker" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutNotificationSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/normalTextRegular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingVertical="@dimen/_6sdp"
+                android:text="Notification Action" />
+
+            <TextView
+                style="@style/normalTextRegular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Default, Whatsapp, Instagram" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutNotificationSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/normalTextRegular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/_6sdp"
+                android:text="Whatsapp Number" />
+
+            <EditText
+                style="@style/normalTextRegular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:hint="whatsapp number number" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvRepeat"
+            style="@style/normalTextRegular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/_6sdp"
+            android:text="Repeat"
+            app:drawableEndCompat="@drawable/ic_arrow_forward" />
+
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -92,6 +92,7 @@ class AddEvents : AppCompatActivity() {
                     emoji != intent.getStringExtra("emoji")
                 ) {
                     viewModel.updateEvent(id = id, title = title, description = desc, emoji = emoji)
+                    //create event remainder for this with update an already existing
                     shortToast("Event updated")
                 }
             } else {
