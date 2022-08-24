@@ -10,16 +10,22 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.view.View
+import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.ViewModelProvider
+import com.app.remindme.R
 import com.app.remindme.data.model.EventsModel
 import com.app.remindme.databinding.ActivityAddEventsBinding
 import com.app.remindme.services.NotifyEventService
 import com.app.remindme.ui.viewmodel.EventsViewModel
 import com.app.remindme.utils.USERDATA.NOTIFICATION_CHANNEL_ID
 import com.app.remindme.utils.hide
+import com.app.remindme.utils.saveSessionData
 import com.app.remindme.utils.shortToast
 import com.app.remindme.utils.show
+import java.io.File
 import java.util.*
 
 
@@ -43,7 +49,7 @@ class AddEventsActivity : AppCompatActivity() {
 
     private fun initViews() {
         binding?.inclLayout?.tvTitle?.text = "Add Events"
-        binding?.tvNotificationSound?.text = getNotificationSound()
+        binding?.tvNotificationSound?.text = File(getNotificationSound()).nameWithoutExtension
 
         val year = intent.getIntExtra("year", -1)
         val month = intent.getIntExtra("month", -1)
@@ -78,6 +84,7 @@ class AddEventsActivity : AppCompatActivity() {
                 shortToast("Please fill at least one field")
             }
         }
+
         binding?.layoutNotificationSound?.setOnClickListener {
             /*         val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
                      intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
@@ -99,12 +106,16 @@ class AddEventsActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+
         binding?.swNotification?.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 binding?.layoutNotificationSettings?.show()
             } else {
                 binding?.layoutNotificationSettings?.hide()
             }
+        }
+        binding?.tvNotificationAction?.setOnClickListener {
+            showPopupMenu(it, R.menu.notication_action_menu)
         }
     }
 
@@ -151,7 +162,7 @@ class AddEventsActivity : AppCompatActivity() {
                 }
             } else {
                 viewModel.addEvent(EventsModel(day, month, year, title, desc, emoji))
-                createEventRemainder(title, emoji, desc, day, month, year, hour, minute)
+                createEventReminder(title, emoji, desc, day, month, year, hour, minute)
                 //todo add option for user to pre notify 5 or 6 or 7 days before the event
                 shortToast("Event added")
             }
@@ -159,7 +170,7 @@ class AddEventsActivity : AppCompatActivity() {
         super.onBackPressed()
     }
 
-    private fun createEventRemainder(
+    private fun createEventReminder(
         title: String,
         emoji: String,
         description: String,
@@ -198,5 +209,16 @@ class AddEventsActivity : AppCompatActivity() {
                 notificationManager.getNotificationChannel(NOTIFICATION_CHANNEL_ID).sound
             ).getTitle(this) ?: ""
         } else ""
+    }
+
+    private fun showPopupMenu(view: View, @MenuRes menuRes: Int) {
+        val popup = PopupMenu(this@AddEventsActivity, view)
+        popup.menuInflater.inflate(menuRes, popup.menu)
+        popup.setOnMenuItemClickListener {
+            saveSessionData("notification_action", it.title.toString())
+            binding?.tvNotificationAction?.text = it.title
+            return@setOnMenuItemClickListener true
+        }
+        popup.show()
     }
 }

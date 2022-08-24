@@ -159,7 +159,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <LinearLayout
                         android:id="@+id/layoutNotificationSound"
@@ -200,6 +200,7 @@
 
                         <TextView
                             style="@style/smallTextRegular"
+                            android:id="@+id/tvNotificationAction"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Default, Whatsapp, Instagram"
@@ -227,12 +228,27 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:background="@android:color/transparent"
+                            android:layout_marginStart="@dimen/_10sdp"
                             android:gravity="center"
                             android:hint="whatsapp number"
-                            android:padding="@dimen/_3sdp" />
+                            android:background="@drawable/shape_edittext"
+                            android:paddingVertical="@dimen/_5sdp" />
 
                     </LinearLayout>
+
+
+                    <EditText
+                        android:id="@+id/etMessage"
+                        style="@style/normalTextRegular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shape_edittext"
+                        android:gravity="center"
+                        android:hint="your message.."
+                        android:inputType="textMultiLine"
+                        android:minHeight="@dimen/_40sdp"
+                        android:padding="@dimen/_3sdp" />
+
                 </LinearLayout>
 
                 <LinearLayout
