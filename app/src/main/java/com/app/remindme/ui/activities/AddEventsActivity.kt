@@ -1,20 +1,29 @@
 package com.app.remindme.ui.activities
 
 import android.app.AlarmManager
+import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.app.remindme.data.model.EventsModel
 import com.app.remindme.databinding.ActivityAddEventsBinding
 import com.app.remindme.services.NotifyEventService
 import com.app.remindme.ui.viewmodel.EventsViewModel
+import com.app.remindme.utils.USERDATA.NOTIFICATION_CHANNEL_ID
+import com.app.remindme.utils.hide
 import com.app.remindme.utils.shortToast
+import com.app.remindme.utils.show
 import java.util.*
 
-class AddEvents : AppCompatActivity() {
+
+class AddEventsActivity : AppCompatActivity() {
     private lateinit var viewModel: EventsViewModel
 
     private var binding: ActivityAddEventsBinding? = null
@@ -34,6 +43,7 @@ class AddEvents : AppCompatActivity() {
 
     private fun initViews() {
         binding?.inclLayout?.tvTitle?.text = "Add Events"
+        binding?.tvNotificationSound?.text = getNotificationSound()
 
         val year = intent.getIntExtra("year", -1)
         val month = intent.getIntExtra("month", -1)
@@ -50,6 +60,7 @@ class AddEvents : AppCompatActivity() {
         binding?.etTitle?.setText(title)
         binding?.etDesc?.setText(description)
         binding?.etEmoji?.setText(emoji)
+        //todo add option to sync contacts
     }
 
     private fun handleEvents() {
@@ -67,7 +78,50 @@ class AddEvents : AppCompatActivity() {
                 shortToast("Please fill at least one field")
             }
         }
+        binding?.layoutNotificationSound?.setOnClickListener {
+            /*         val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+                     intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
+                     intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone")
+                     intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, null as Uri?)
+                     startActivityForResult(intent, 5)*/
+            /*   val intent: Intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
+                   .putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                   .putExtra(Settings.EXTRA_CHANNEL_ID, NOTIFICATION_CHANNEL_ID)
+               startActivity(intent)*/
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
+                intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                intent.putExtra(Settings.EXTRA_CHANNEL_ID, NOTIFICATION_CHANNEL_ID)
+                startActivity(intent)
+            } else {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                intent.data = Uri.parse("package:$packageName")
+                startActivity(intent)
+            }
+        }
+        binding?.swNotification?.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding?.layoutNotificationSettings?.show()
+            } else {
+                binding?.layoutNotificationSettings?.hide()
+            }
+        }
     }
+
+/*    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 5) {
+            if (resultCode == RESULT_OK) {
+                val uri =
+                    data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) ?: Uri.EMPTY
+                binding?.tvNotificationSound?.text =
+                    RingtoneManager.getRingtone(this, uri).getTitle(this)
+                RingtoneManager.getRingtone(this, uri).getTitle(this)
+                saveSessionData("notification_uri", uri)
+                uri.toLog()
+            }
+        }
+    }*/
 
     override fun onBackPressed() {
         val title = binding?.etTitle?.text.toString().trim()
@@ -115,18 +169,34 @@ class AddEvents : AppCompatActivity() {
         hour: Int,
         minute: Int
     ) {
-        val intent = Intent(this@AddEvents, NotifyEventService::class.java)
+        val intent = Intent(this@AddEventsActivity, NotifyEventService::class.java)
         intent.putExtra("title", title)
         intent.putExtra("emoji", emoji)
         intent.putExtra("description", description)
         val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
         val pendingIntent =
-            PendingIntent.getBroadcast(this@AddEvents, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            PendingIntent.getBroadcast(
+                this@AddEventsActivity,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
         val calendar = Calendar.getInstance()
         //   calendar.set(year, month, date, hour, minute, 0)
         /*val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val test: String = sdf.format(calendar.time)
         logThis(test)*/
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis + 5000, pendingIntent)
+    }
+
+    private fun getNotificationSound(): String {
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            RingtoneManager.getRingtone(
+                this,
+                notificationManager.getNotificationChannel(NOTIFICATION_CHANNEL_ID).sound
+            ).getTitle(this) ?: ""
+        } else ""
     }
 }

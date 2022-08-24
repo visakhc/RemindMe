@@ -92,11 +92,11 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
 
     private fun handleEvents() {
         binding?.ivSettings?.setOnClickListener {
-            val intent = Intent(this@MainActivity, AddEvents::class.java)
+            val intent = Intent(this@MainActivity, AddEventsActivity::class.java)
             startActivity(intent)
         }
         binding?.btAddEvent?.setOnClickListener {
-            val intent = Intent(this@MainActivity, AddEvents::class.java)
+            val intent = Intent(this@MainActivity, AddEventsActivity::class.java)
             startActivity(intent)
         }
         binding?.monthPicker?.setOnClickListener {
@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
         }
         viewModel.findEventDayInMonth(mMonth, mYear).observe(this) {
             it?.forEach { item ->
-                mAdapter.updateListWithEvents(mMonth, item.day, item.emoji)
+                // mAdapter.updateListWithEvents(mMonth, item.day, item.emoji) fixme
             }
         }
     }

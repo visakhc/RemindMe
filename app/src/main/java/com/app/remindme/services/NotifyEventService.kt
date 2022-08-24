@@ -11,11 +11,11 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.app.remindme.R
 import com.app.remindme.ui.activities.MainActivity
+import com.app.remindme.utils.USERDATA.NOTIFICATION_CHANNEL_ID
 import com.app.remindme.utils.logThis
 
 
 class NotifyEventService : BroadcastReceiver() {
-    val NOTIFICATION_CHANNEL_ID = "10001"
     private val default_notification_channel_id = "default"
 
 
@@ -32,9 +32,7 @@ class NotifyEventService : BroadcastReceiver() {
             description =
                 if (description == null || description == "" || description == " ") "tap to know more" else description
 
-            logThis(
-                "WE REACH ON BIND  $title $emoji $description ${title.length} ${emoji.length} ${description.length} "
-            )
+            logThis("[notification] title: $title emoji: $emoji description: $description ")
 
             val notificationIntent = Intent(context, MainActivity::class.java)
             notificationIntent.flags =

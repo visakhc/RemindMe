@@ -19,8 +19,8 @@
             android:exported="true" />
 
         <activity
-            android:name=".ui.activities.AddEvents"
-            android:exported="false" />
+            android:name=".ui.activities.AddEventsActivity"
+            android:exported="true" />
         <activity
             android:name=".ui.activities.MainActivity"
             android:exported="true">
