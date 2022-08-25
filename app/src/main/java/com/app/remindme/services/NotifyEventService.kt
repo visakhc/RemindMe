@@ -11,9 +11,9 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
 import com.app.remindme.R
+import com.app.remindme.data.model.NotificationModel
 import com.app.remindme.ui.activities.MainActivity
 import com.app.remindme.utils.USERDATA.NOTIFICATION_CHANNEL_ID
-import com.app.remindme.utils.getSessionData
 import com.app.remindme.utils.logThis
 
 
@@ -23,31 +23,27 @@ class NotifyEventService : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         with(context!!) {
-            var title = intent?.getStringExtra("title")
+            val data = intent?.getBundleExtra("data")
+                ?.getSerializable("notificationModel") as NotificationModel
+            var title = data.title
+            var emoji = data.emoji
+            var description = data.description
             title =
                 if (title == null || title == "" || title == " ") "An Event is coming " else title
-
-            var emoji = intent?.getStringExtra("emoji")
             emoji = if (emoji == null || emoji == "" || emoji == " ") "‼" else emoji
-//todo fix notification title and emoji not showing correctly
-            var description = intent?.getStringExtra("description")
             description =
                 if (description == null || description == "" || description == " ") "tap to know more" else description
 
-            logThis("[notification] title: $title emoji: $emoji description: $description ")
-            val notifAction = getSessionData("notification_action", "")
-            val notificationIntent = when (notifAction) {
+            //logThis("[notification] title: $title emoji: $emoji description: $description ")
+            logThis("[notification] $data ")
+
+            val notificationIntent = when (data.notificationAction) {
                 "Default" -> Intent(context, MainActivity::class.java)
                 "Whatsapp" -> {
-                    val url = "https://api.whatsapp.com/send?phone=${
-                        getSessionData(
-                            "whatsappNumber",
-                            ""
-                        )
-                    }&text=${getSessionData("whatsappMessage", "")}"
-                    Intent(Intent.ACTION_VIEW).also {
-                        it.data = url.toUri()
-                    }
+                    val url =
+                        "https://api.whatsapp.com/send?phone=+91${data.notificationExtraData}&text=${data.notificationActionMsg}".toUri()
+                    logThis("Trying to open Whatsapp $url")
+                    Intent(Intent.ACTION_VIEW).also { it.data = url }
                 }
                 "Instagram" -> Intent(context, MainActivity::class.java) //todo
                 else -> {
@@ -77,8 +73,16 @@ class NotifyEventService : BroadcastReceiver() {
                 mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID)
                 mNotificationManager.createNotificationChannel(notificationChannel)
             }
+
             mNotificationManager.notify(System.currentTimeMillis().toInt(), mBuilder.build())
             //  throw UnsupportedOperationException("Not yet implemented")
+            /*   if (getSessionData("openedEvent${data.id}",false)){
+                   if (data?.deleteEvent==true){
+                       deleteEvent(data.id)
+                   }todo do this in a separate service which handles events that are opened and unopened
+               }else{
+                   sendNotification(" ")
+               }*/
         }
     }
 }
