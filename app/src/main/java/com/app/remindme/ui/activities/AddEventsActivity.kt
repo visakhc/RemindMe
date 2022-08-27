@@ -1,6 +1,7 @@
 package com.app.remindme.ui.activities
 
 import android.app.AlarmManager
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -12,20 +13,20 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import androidx.annotation.MenuRes
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.coroutineScope
 import com.app.remindme.R
 import com.app.remindme.data.model.EventsModel
 import com.app.remindme.data.model.NotificationModel
 import com.app.remindme.databinding.ActivityAddEventsBinding
 import com.app.remindme.services.NotifyEventService
 import com.app.remindme.ui.viewmodel.EventsViewModel
+import com.app.remindme.utils.*
 import com.app.remindme.utils.USERDATA.NOTIFICATION_CHANNEL_ID
-import com.app.remindme.utils.hide
-import com.app.remindme.utils.saveSessionData
-import com.app.remindme.utils.shortToast
-import com.app.remindme.utils.show
+import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 
@@ -36,7 +37,7 @@ class AddEventsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddEventsBinding
     override fun onResume() {
         super.onResume()
-        binding.tvNotificationSound.text = File(getNotificationSound()).nameWithoutExtension
+        binding.tvNotificationSound.text = getNotificationSound() ?: "Default"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,6 +72,7 @@ class AddEventsActivity : AppCompatActivity() {
         binding.etTitle.setText(title)
         binding.etDesc.setText(description)
         binding.etEmoji.setText(emoji)
+        binding.tvNotificationSound.isSelected = true
         //todo add option to sync contacts
     }
 
@@ -170,18 +172,21 @@ class AddEventsActivity : AppCompatActivity() {
                         description = desc,
                         emoji = emoji
                     )
-                    //create event remainder for this with update an already existing
+                    //create or edit todo event remainder for this with update an already existing
                     shortToast("Event updated")
                 }
             } else {
-                viewModel.addEvent(EventsModel(day, month, year, title, desc, emoji))
-                createEventReminder(
-                    NotificationModel(
-                        title, emoji, desc, day, month, year,
-                        hour, minute, deleteEvent, notificationAction,
-                        notificationExtraData, notificationActionMsg
+                val eventData = EventsModel(day, month, year, title, desc, emoji)
+                viewModel.addEvent(eventData)
+                if (binding.swSendNotification.isChecked)
+                    createEventReminder(
+                        NotificationModel(
+                            eventData,
+                            hour, minute, deleteEvent, notificationAction,
+                            notificationExtraData, notificationActionMsg
+                        )
                     )
-                )
+
                 //todo add option for user to pre notify 5 or 6 or 7 days before the event
                 shortToast("Event added")
             }
@@ -207,19 +212,9 @@ class AddEventsActivity : AppCompatActivity() {
         /*val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val test: String = sdf.format(calendar.time)
         logThis(test)*/
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis + 2000, pendingIntent)
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis + 200, pendingIntent)
     }
 
-    private fun getNotificationSound(): String {
-        val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            RingtoneManager.getRingtone(
-                this,
-                notificationManager.getNotificationChannel(NOTIFICATION_CHANNEL_ID).sound
-            ).getTitle(this) ?: ""
-        } else ""
-    }
 
     private fun showPopupMenu(view: View, @MenuRes menuRes: Int) {
         val popup = PopupMenu(this@AddEventsActivity, view)

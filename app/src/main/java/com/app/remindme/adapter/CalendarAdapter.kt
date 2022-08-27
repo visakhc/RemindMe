@@ -43,7 +43,6 @@ class CalendarAdapter(private var listener: OnClickListener) :
             holder.itemView.setOnClickListener {
                 listener.onItemClick(this)
             }
-
         }
     }
 

@@ -148,6 +148,7 @@
                         android:id="@+id/swSendNotification"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:checked="true"
                         android:paddingHorizontal="@dimen/_10sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/timePicker" />
@@ -158,8 +159,7 @@
                     android:id="@+id/layoutNotificationSettings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:id="@+id/layoutNotificationSound"
@@ -169,17 +169,21 @@
 
                         <TextView
                             style="@style/normalTextRegular"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:paddingVertical="@dimen/_6sdp"
                             android:text="Notification Sound" />
 
                         <TextView
                             android:id="@+id/tvNotificationSound"
                             style="@style/smallTextRegular"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="marquee"
+                            android:gravity="end"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:singleLine="true"
                             android:textColor="@color/gray" />
 
                     </LinearLayout>

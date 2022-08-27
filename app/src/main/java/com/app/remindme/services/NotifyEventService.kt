@@ -25,14 +25,14 @@ class NotifyEventService : BroadcastReceiver() {
         with(context!!) {
             val data = intent?.getBundleExtra("data")
                 ?.getSerializable("notificationModel") as NotificationModel
-            var title = data.title
-            var emoji = data.emoji
-            var description = data.description
+            var title = data.eventsModel.title
+            var emoji = data.eventsModel.emoji
+            var description = data.eventsModel.description
             title =
-                if (title == null || title == "" || title == " ") "An Event is coming " else title
-            emoji = if (emoji == null || emoji == "" || emoji == " ") "‼" else emoji
+                if (title == "" || title == " ") "An Event is coming " else title
+            emoji = if (emoji == "" || emoji == " ") "" else emoji
             description =
-                if (description == null || description == "" || description == " ") "tap to know more" else description
+                if (description == "" || description == " ") "tap to know more" else description
 
             //logThis("[notification] title: $title emoji: $emoji description: $description ")
             logThis("[notification] $data ")
@@ -63,19 +63,8 @@ class NotifyEventService : BroadcastReceiver() {
             mBuilder.setContentText(description)
             mBuilder.setSmallIcon(R.drawable.ic_launcher_foreground)
             mBuilder.setAutoCancel(true)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val importance = NotificationManager.IMPORTANCE_HIGH
-                val notificationChannel = NotificationChannel(
-                    NOTIFICATION_CHANNEL_ID,
-                    "RemindMe Events",
-                    importance
-                )
-                mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID)
-                mNotificationManager.createNotificationChannel(notificationChannel)
-            }
-
+            mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID)
             mNotificationManager.notify(System.currentTimeMillis().toInt(), mBuilder.build())
-            //  throw UnsupportedOperationException("Not yet implemented")
             /*   if (getSessionData("openedEvent${data.id}",false)){
                    if (data?.deleteEvent==true){
                        deleteEvent(data.id)

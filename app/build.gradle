@@ -2,7 +2,6 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
     id 'kotlin-kapt'
     id("androidx.navigation.safeargs")
 }
@@ -65,7 +64,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
 
     // Kotlin components
-     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
 
     testImplementation 'junit:junit:4.13.2'

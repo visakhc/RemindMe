@@ -23,6 +23,9 @@ interface Dao {
     @Query("DELETE FROM user_table")
     fun deleteAllEvents()
 
+    /*@Query("DELETE  FROM user_table")
+    fun deleteEvents(id: Int)*/
+
     @Query("UPDATE user_table SET title = :title, description = :description,emoji =:emoji WHERE id = :id")
     fun updateEvent(id: Int, title: String, description: String, emoji: String)
 

@@ -2,6 +2,7 @@ package com.app.remindme.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName = "user_table")
 data class EventsModel(
@@ -12,7 +13,7 @@ data class EventsModel(
     val description: String,
     val emoji: String = "",
     @PrimaryKey(autoGenerate = true) var id: Int? = null
-)
+):Serializable
 
 data class EventsDayModel(
     val day: Int,
