@@ -34,8 +34,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
     private var binding: ActivityMainBinding? = null
     private val mAdapter by lazy { CalendarAdapter(this) }
     private val flexboxLayout by lazy { FlexboxLayoutManager(this@MainActivity) }
-
-    private lateinit var viewModel: EventsViewModel
+    private val viewModel by lazy { ViewModelProvider(this)[EventsViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,14 +42,13 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
         setContentView(binding?.root)
 
         init()
-        // viewModel.deleteAllCalendarData()
         initViews()
         setCalendarView()
         handleEvents()
+        //viewModel.deleteAllCalendarData()
     }
 
     private fun init() {
-        viewModel = ViewModelProvider(this)[EventsViewModel::class.java]
         mMonth = thisMonth
         mYear = USERDATA.thisYear
     }
@@ -138,7 +136,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
         }
         viewModel.findEventDayInMonth(mMonth, mYear).observe(this) {
             it?.forEach { item ->
-                // mAdapter.updateListWithEvents(mMonth, item.day, item.emoji) fixme
+                mAdapter.updateListWithEvents(mMonth, item.day, item.emoji)/* fixme*/
             }
         }
     }

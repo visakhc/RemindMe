@@ -3,6 +3,7 @@ package com.app.remindme.data.model
 import java.io.Serializable
 
 data class NotificationModel(
+    val eventId: Long,
     val eventsModel: EventsModel,
     val hour: Int,
     val minute: Int,

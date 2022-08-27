@@ -59,7 +59,7 @@ class CalendarAdapter(private var listener: OnClickListener) :
 
     fun updateListWithEvents(month: Int, pos: Int, emoji: String) {
         mMonth = month
-        localList[pos - 1].emoji = emoji
+        localList[pos - 1].emoji += emoji
         notifyItemChanged(pos - 1)
     }
 

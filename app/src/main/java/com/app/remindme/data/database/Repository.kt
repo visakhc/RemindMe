@@ -9,23 +9,27 @@ class Repository(private val userDao: Dao) {
 
     val readAllData = userDao.readAllData()
 
-    suspend fun addEvent(user: EventsModel) {
-        userDao.addEvent(user)
+    suspend fun addEvent(user: EventsModel): Long {
+       return userDao.addEvent(user)
     }
 
     suspend fun addCalendarData(calendar: MutableList<CalendarModel>) {
         userDao.addCalendarData(calendar)
     }
 
-    suspend fun deleteEvent() {
+    fun deleteAllEvents() {
         userDao.deleteAllEvents()
     }
 
-    suspend fun deleteAllCalendarData() {
+   suspend fun deleteEvents(eventId: Long) {
+        userDao.deleteEvents(eventId)
+    }
+
+    fun deleteAllCalendarData() {
         userDao.deleteAllCalendarData()
     }
 
-    suspend fun updateEvent(id: Int, title: String, description: String, emoji: String) {
+    fun updateEvent(id: Int, title: String, description: String, emoji: String) {
         userDao.updateEvent(id, title, description, emoji)
     }
 

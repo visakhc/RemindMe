@@ -1,19 +1,14 @@
 package com.app.remindme.ui.activities
 
 import android.app.AlarmManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
-import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import androidx.annotation.MenuRes
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.ViewModelProvider
@@ -27,7 +22,6 @@ import com.app.remindme.ui.viewmodel.EventsViewModel
 import com.app.remindme.utils.*
 import com.app.remindme.utils.USERDATA.NOTIFICATION_CHANNEL_ID
 import kotlinx.coroutines.launch
-import java.io.File
 import java.util.*
 
 
@@ -177,16 +171,18 @@ class AddEventsActivity : AppCompatActivity() {
                 }
             } else {
                 val eventData = EventsModel(day, month, year, title, desc, emoji)
-                viewModel.addEvent(eventData)
-                if (binding.swSendNotification.isChecked)
-                    createEventReminder(
-                        NotificationModel(
-                            eventData,
-                            hour, minute, deleteEvent, notificationAction,
-                            notificationExtraData, notificationActionMsg
+                lifecycle.coroutineScope.launch {
+                    val eventId = viewModel.addEvent(eventData)
+                    if (binding.swSendNotification.isChecked)
+                        createEventReminder(
+                            NotificationModel(
+                                eventId,
+                                eventData,
+                                hour, minute, deleteEvent, notificationAction,
+                                notificationExtraData, notificationActionMsg
+                            )
                         )
-                    )
-
+                }
                 //todo add option for user to pre notify 5 or 6 or 7 days before the event
                 shortToast("Event added")
             }

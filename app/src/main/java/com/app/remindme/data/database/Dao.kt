@@ -12,7 +12,7 @@ import com.app.remindme.data.model.EventsModel
 @Dao
 interface Dao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addEvent(eventsModel: EventsModel)
+    suspend fun addEvent(eventsModel: EventsModel):Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addCalendarData(eventsModel: MutableList<CalendarModel>)
@@ -23,8 +23,8 @@ interface Dao {
     @Query("DELETE FROM user_table")
     fun deleteAllEvents()
 
-    /*@Query("DELETE  FROM user_table")
-    fun deleteEvents(id: Int)*/
+    @Query("DELETE  FROM user_table WHERE id =:eventId")
+    suspend fun deleteEvents(eventId: Long)
 
     @Query("UPDATE user_table SET title = :title, description = :description,emoji =:emoji WHERE id = :id")
     fun updateEvent(id: Int, title: String, description: String, emoji: String)

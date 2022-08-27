@@ -14,20 +14,17 @@ import kotlinx.coroutines.launch
 
 class EventsViewModel(application: Application) : AndroidViewModel(application) {
 
-    val readAllData: LiveData<List<EventsModel>>
 
     private val repository: Repository
 
     init {
         val userDao = DatabaseBuilder.getDatabase(application).userDao()
         repository = Repository(userDao)
-        readAllData = repository.readAllData
     }
 
-    fun addEvent(event: EventsModel) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.addEvent(event)
-        }
+    suspend fun addEvent(event: EventsModel): Long {
+        return repository.addEvent(event)
+
     }
 
 
@@ -37,10 +34,14 @@ class EventsViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun deleteEvent() {
+    fun deleteAllEvents() {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteEvent()
+            repository.deleteAllEvents()
         }
+    }
+
+    suspend fun deleteEvents(eventId: Long) {
+        repository.deleteEvents(eventId)
     }
 
     fun deleteAllCalendarData() {
@@ -65,7 +66,8 @@ class EventsViewModel(application: Application) : AndroidViewModel(application) 
 
     /*  fun getCalendarData(month: Int, year: Int): LiveData<List<CalendarModel>> {
           return repository.getCalendarData(month, year)
-      }*/
+      }
+     */
     suspend fun getCalendarData(month: Int, year: Int): List<CalendarModel> {
         return repository.getCalendarData(month, year)
     }

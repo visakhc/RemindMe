@@ -1,20 +1,21 @@
 package com.app.remindme.services
 
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
-import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
 import com.app.remindme.R
+import com.app.remindme.data.database.DatabaseBuilder
+import com.app.remindme.data.database.Repository
 import com.app.remindme.data.model.NotificationModel
 import com.app.remindme.ui.activities.MainActivity
 import com.app.remindme.utils.USERDATA.NOTIFICATION_CHANNEL_ID
 import com.app.remindme.utils.logThis
+import kotlinx.coroutines.*
 
 
 class NotifyEventService : BroadcastReceiver() {
@@ -34,8 +35,8 @@ class NotifyEventService : BroadcastReceiver() {
             description =
                 if (description == "" || description == " ") "tap to know more" else description
 
-            //logThis("[notification] title: $title emoji: $emoji description: $description ")
             logThis("[notification] $data ")
+            // todo do this in a separate service which handles events that are opened and unopened
 
             val notificationIntent = when (data.notificationAction) {
                 "Default" -> Intent(context, MainActivity::class.java)
@@ -65,13 +66,14 @@ class NotifyEventService : BroadcastReceiver() {
             mBuilder.setAutoCancel(true)
             mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID)
             mNotificationManager.notify(System.currentTimeMillis().toInt(), mBuilder.build())
-            /*   if (getSessionData("openedEvent${data.id}",false)){
-                   if (data?.deleteEvent==true){
-                       deleteEvent(data.id)
-                   }todo do this in a separate service which handles events that are opened and unopened
-               }else{
-                   sendNotification(" ")
-               }*/
+
+            if (data.deleteEvent) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val userDao = DatabaseBuilder.getDatabase(context).userDao()
+                    val repository = Repository(userDao)
+                    repository.deleteEvents(data.eventId)
+                }
+            }
         }
     }
 }
