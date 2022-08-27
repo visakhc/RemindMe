@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.remindme.R
-import com.app.remindme.data.model.CalenderModel
+import com.app.remindme.data.model.CalendarModel
 import com.app.remindme.databinding.ItemCalenderBinding
 import com.app.remindme.utils.USERDATA.thisDay
 import com.app.remindme.utils.USERDATA.thisMonth
@@ -13,7 +13,7 @@ import com.app.remindme.utils.USERDATA.thisMonth
 class CalendarAdapter(private var listener: OnClickListener) :
     RecyclerView.Adapter<CalendarAdapter.MyViewHolder>() {
     private var mMonth: Int = -1
-    private var localList: MutableList<CalenderModel> = mutableListOf()
+    private var localList: MutableList<CalendarModel> = mutableListOf()
 
     inner class MyViewHolder(val binding: ItemCalenderBinding) :
         RecyclerView.ViewHolder(binding.root) {}
@@ -51,7 +51,7 @@ class CalendarAdapter(private var listener: OnClickListener) :
         return localList.size
     }
 
-    fun updateList(month: Int, list: List<CalenderModel>) {
+    fun updateList(month: Int, list: List<CalendarModel>) {
         mMonth = month
         localList.clear()
         localList.addAll(list)
@@ -65,6 +65,6 @@ class CalendarAdapter(private var listener: OnClickListener) :
     }
 
     interface OnClickListener {
-        fun onItemClick(item: CalenderModel)
+        fun onItemClick(item: CalendarModel)
     }
 }

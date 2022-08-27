@@ -2,18 +2,25 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.app.remindme">
 
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/icon"
+        android:icon="@mipmap/ic_app_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_app_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RemindMe">
-
+        <receiver
+            android:name=".services.NotifyEventService"
+            android:enabled="true"
+            android:exported="true" />
 
         <activity
-            android:name=".ui.activities.AddEvents"
-            android:exported="false" />
+            android:name=".ui.activities.AddEventsActivity"
+            android:exported="true" />
         <activity
             android:name=".ui.activities.MainActivity"
             android:exported="true">

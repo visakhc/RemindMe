@@ -8,9 +8,10 @@ import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.coroutineScope
 import com.app.remindme.R
 import com.app.remindme.adapter.CalendarAdapter
-import com.app.remindme.data.model.CalenderModel
+import com.app.remindme.data.model.CalendarModel
 import com.app.remindme.databinding.ActivityMainBinding
 import com.app.remindme.ui.bottomsheets.EventsBottomSheet
 import com.app.remindme.ui.viewmodel.EventsViewModel
@@ -21,12 +22,13 @@ import com.app.remindme.utils.hide
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import kotlinx.coroutines.launch
 import java.util.*
 
 @SuppressLint("ClickableViewAccessibility")
 class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
 
-    private var calendarList = emptyList<CalenderModel>()
+    private var calendarList = emptyList<CalendarModel>()
     private var mMonth: Int = -1
     private var mYear: Int = -1
     private var binding: ActivityMainBinding? = null
@@ -41,6 +43,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
         setContentView(binding?.root)
 
         init()
+        // viewModel.deleteAllCalendarData()
         initViews()
         setCalendarView()
         handleEvents()
@@ -54,27 +57,50 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
 
     private fun initViews() {
         binding?.btAddEvent?.hide() //for testing
-        binding?.tvDay?.text = getDayFormatted("EEEE")
-        binding?.tvMonth?.text = getDayFormatted("MMMM")
-        flexboxLayout.apply {
+        //  binding?.tvDay?.text = getDayFormatted("EEEE")
+        //  binding?.tvMonth?.text = getDayFormatted("MMMM")
+        /*     flexboxLayout.apply {
+                 flexDirection = FlexDirection.ROW
+                 justifyContent = JustifyContent.SPACE_EVENLY
+             }*/
+        binding?.recyclerView?.layoutManager = flexboxLayout.apply {
             flexDirection = FlexDirection.ROW
             justifyContent = JustifyContent.SPACE_EVENLY
         }
-        binding?.recyclerView?.layoutManager = flexboxLayout
         binding?.recyclerView?.adapter = mAdapter
+/*      val months = resources.getStringArray(R.array.months_array)
+        binding?.monthPicker?.apply {
+            minValue = 0
+            maxValue = months.lastIndex
+            displayedValues = months
+            value = mMonth
+            wrapSelectorWheel = false
+
+            setOnValueChangedListener { _, _, pos ->
+                mMonth = pos
+                binding?.tvMonth?.text = months[pos]
+                setCalendarView()
+            }
+          for (i in data.indices) {
+                  if (selectedUnit == data[i]?.name) {
+                      selectedUnitId = data[i]?.id.toString()
+                      break
+                  }
+              }
+        }*/
     }
 
     private fun handleEvents() {
         binding?.ivSettings?.setOnClickListener {
-            val intent = Intent(this@MainActivity, AddEvents::class.java)
+            val intent = Intent(this@MainActivity, AddEventsActivity::class.java)
             startActivity(intent)
         }
         binding?.btAddEvent?.setOnClickListener {
-            val intent = Intent(this@MainActivity, AddEvents::class.java)
+            val intent = Intent(this@MainActivity, AddEventsActivity::class.java)
             startActivity(intent)
         }
-        binding?.tvMonth?.setOnClickListener {
-            showMenu(it, R.menu.menu)
+        binding?.monthPicker?.setOnClickListener {
+            showMenu(it, R.menu.calendar_menu)
         }
 
         /*  binding?.tvMonth?.setOnTouchListener(object : OnSwipeTouchListener(this@MainActivity) {
@@ -99,39 +125,44 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
           })*/
 
     }
-/*
-    private fun swipedToCal(mMonth: Int) {
+
+    private fun setCalendarView() {
         val cal = Calendar.getInstance()
         cal.set(mYear, mMonth, 4)
         binding?.tvMonth?.text = getDayFormatted("MMMM", cal)
         binding?.tvDay?.text = if (mMonth == thisMonth) getDayFormatted("EEEE") else ""
-        setCalendarView()
-    }*/
-
-    private fun setCalendarView() {
-        calendarList = calendarBuilder(mMonth, mYear)
-        mAdapter.updateList(mMonth, calendarList)
+        lifecycle.coroutineScope.launch { //todo add splash screen to get time
+            val localCalendarData = viewModel.getCalendarData(mMonth, mYear)
+            calendarList = localCalendarData.ifEmpty { calendarBuilder(mMonth, mYear) }
+            mAdapter.updateList(mMonth, calendarList)
+        }
         viewModel.findEventDayInMonth(mMonth, mYear).observe(this) {
             it?.forEach { item ->
-                mAdapter.updateListWithEvents(mMonth, item.day, item.emoji)
+                // mAdapter.updateListWithEvents(mMonth, item.day, item.emoji) fixme
             }
         }
     }
 
-
-    private fun calendarBuilder(month: Int, year: Int): MutableList<CalenderModel> {
-        val dayList = mutableListOf<CalenderModel>()
+    private fun calendarBuilder(month: Int, year: Int): MutableList<CalendarModel> {
+        val dayList = mutableListOf<CalendarModel>()
         val cal = Calendar.getInstance()
         cal.set(year, month, 1)
         val maxDayOfMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
-        for (i in 1..maxDayOfMonth) {
-            cal.set(year, month, i)
+        for (date in 1..maxDayOfMonth) {
+            cal.set(year, month, date)
             val dayInWords = getDayFormatted("EEEE", cal)
-            dayList.add(CalenderModel(i, dayInWords))
+            dayList.add(
+                CalendarModel(
+                    date,
+                    dayInWords,
+                    month,
+                    year
+                )
+            )
         }
+        viewModel.addCalendarData(dayList)
         return dayList
     }
-
 
     private fun showMenu(v: View, @MenuRes menuRes: Int) {
         //todo change this to more lite way
@@ -157,10 +188,6 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
             }
             if (month != -1) {
                 mMonth = month
-                val cal = Calendar.getInstance()
-                cal.set(mYear, mMonth, 4)
-                binding?.tvMonth?.text = getDayFormatted("MMMM", cal)
-                binding?.tvDay?.text = if (mMonth == thisMonth) getDayFormatted("EEEE") else ""
                 setCalendarView()
             }
             return@setOnMenuItemClickListener true
@@ -168,7 +195,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
         popup.show()
     }
 
-    override fun onItemClick(item: CalenderModel) {
+    override fun onItemClick(item: CalendarModel) {
         val eBSheet = EventsBottomSheet()
         eBSheet.arguments = Bundle().apply {
             putInt("day", item.date)

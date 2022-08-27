@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.app.remindme.data.database.DatabaseBuilder
 import com.app.remindme.data.database.Repository
+import com.app.remindme.data.model.CalendarModel
 import com.app.remindme.data.model.EventsDayModel
 import com.app.remindme.data.model.EventsModel
 import kotlinx.coroutines.Dispatchers
@@ -29,9 +30,22 @@ class EventsViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+
+    fun addCalendarData(calendar: MutableList<CalendarModel>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addCalendarData(calendar)
+        }
+    }
+
     fun deleteEvent() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteEvent()
+        }
+    }
+
+    fun deleteAllCalendarData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllCalendarData()
         }
     }
 
@@ -47,5 +61,12 @@ class EventsViewModel(application: Application) : AndroidViewModel(application) 
 
     fun findEventDayInMonth(month: Int, year: Int): LiveData<List<EventsDayModel>> {
         return repository.findEventDayInMonth(month, year)
+    }
+
+    /*  fun getCalendarData(month: Int, year: Int): LiveData<List<CalendarModel>> {
+          return repository.getCalendarData(month, year)
+      }*/
+    suspend fun getCalendarData(month: Int, year: Int): List<CalendarModel> {
+        return repository.getCalendarData(month, year)
     }
 }

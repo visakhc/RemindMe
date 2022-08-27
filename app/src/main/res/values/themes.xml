@@ -14,15 +14,22 @@
 
 </style>
 
-<style name="ImageCroper" parent="Theme.AppCompat.Light.DarkActionBar">
-    <!-- Customize your theme here. -->
-    <item name="colorPrimary">@color/green</item>
-    <item name="colorPrimaryDark">@color/green</item>
-    <item name="colorAccent">@color/green</item>
-</style>
+    <style name="DefaultNumberPickerTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorControlNormal">@android:color/transparent</item>
+        <item name="android:fontFamily">@font/poppins_regular</item>
+        <item name="android:textColorPrimary">@android:color/transparent</item>
+        <item name="android:textSize">@dimen/_12ssp</item>
+    </style>
 
-<style name="roundedImageView" parent="">
-    <item name="cornerFamily">rounded</item>
+    <style name="ImageCroper" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/green</item>
+        <item name="colorPrimaryDark">@color/green</item>
+        <item name="colorAccent">@color/green</item>
+    </style>
+
+    <style name="roundedImageView" parent="">
+        <item name="cornerFamily">rounded</item>
     <item name="cornerSizeTopLeft">@dimen/_20sdp</item>
     <item name="cornerSizeTopRight">@dimen/_20sdp</item>
 </style>

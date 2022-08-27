@@ -12,8 +12,10 @@ import com.app.remindme.adapter.EventsAdapter
 import com.app.remindme.adapter.ItemClickListener
 import com.app.remindme.data.model.EventsModel
 import com.app.remindme.databinding.BottomSheetLayoutBinding
-import com.app.remindme.ui.activities.AddEvents
+import com.app.remindme.ui.activities.AddEventsActivity
 import com.app.remindme.ui.viewmodel.EventsViewModel
+import com.app.remindme.utils.hide
+import com.app.remindme.utils.show
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class EventsBottomSheet : BottomSheetDialogFragment(), ItemClickListener {
@@ -58,7 +60,7 @@ class EventsBottomSheet : BottomSheetDialogFragment(), ItemClickListener {
     }
 
     private fun initViews() {
-        binding?.tvDate?.text = "${date}/${month + 1}/${year}"
+//        binding?.tvDate?.text = "${date}/${month + 1}/${year}"
         binding?.rvAlert?.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = recyclerAdapter
@@ -67,14 +69,18 @@ class EventsBottomSheet : BottomSheetDialogFragment(), ItemClickListener {
 
     private fun getEvents() {
         viewModel.findEvent(date, month, year).observe(this) {
-            recyclerAdapter.updateList(it)
+            if (it.isNotEmpty()) {
+                recyclerAdapter.updateList(it)
+                binding?.tvNoEvents?.hide()
+            } else binding?.tvNoEvents?.show()
+
         }
     }
 
     //todo add reminder for events
     private fun handleEvents() {
         binding?.ivAdd?.setOnClickListener {
-            val intent = Intent(requireContext(), AddEvents::class.java)
+            val intent = Intent(requireContext(), AddEventsActivity::class.java)
             intent.putExtra("day", date)
             intent.putExtra("month", month)
             intent.putExtra("year", year)
@@ -83,7 +89,7 @@ class EventsBottomSheet : BottomSheetDialogFragment(), ItemClickListener {
     }
 
     override fun onItemClick(eventsModel: EventsModel) {
-        val intent = Intent(requireContext(), AddEvents::class.java)
+        val intent = Intent(requireContext(), AddEventsActivity::class.java)
         intent.action = "edit"
         intent.putExtra("day", date)
         intent.putExtra("month", month)

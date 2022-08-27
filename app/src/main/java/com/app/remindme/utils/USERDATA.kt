@@ -7,4 +7,7 @@ object USERDATA {
     val thisYear: Int = c.get(Calendar.YEAR)
     val thisMonth: Int = c.get(Calendar.MONTH)
     val thisDay = c.get(Calendar.DATE)
+
+    val NOTIFICATION_CHANNEL_ID = "10001"
+
 }
