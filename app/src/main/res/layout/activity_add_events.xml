@@ -37,7 +37,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:background="@drawable/shape_edittext"
                 android:gravity="center"
-                android:hint="event title"
+                android:hint="title"
                 android:inputType="text|textAutoComplete|textAutoCorrect|textMultiLine"
                 android:paddingVertical="@dimen/_9sdp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +53,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:background="@drawable/shape_edittext"
                 android:gravity="center"
-                android:hint="event description"
+                android:hint="description"
                 android:inputType="text|textAutoComplete|textAutoCorrect|textMultiLine"
                 android:paddingVertical="@dimen/_9sdp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -273,23 +273,23 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tvRepeat"
+                        android:id="@+id/tvReminder"
                         style="@style/normalTextRegular"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:paddingVertical="@dimen/_6sdp"
-                        android:text="Repeat" />
+                        android:text="Reminder this event" />
 
                     <TextView
                         android:id="@+id/tvRepeatStatus"
-                        style="@style/verySmallTextRegular"
+                        style="@style/smallTextRegular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawablePadding="@dimen/_10sdp"
                         android:gravity="center_vertical"
                         android:paddingVertical="@dimen/_6sdp"
-                        android:text="Repeat"
+                        android:text="Never,before 2 days"
                         android:textColor="@color/gray"
                         app:drawableEndCompat="@drawable/ic_arrow_forward" />
 

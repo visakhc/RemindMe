@@ -75,14 +75,15 @@ class AddEventsActivity : AppCompatActivity() {
             onBackPressed()
         }
         binding.btSave.setOnClickListener {
-            val title = binding.etTitle.text.toString()
-            val desc = binding.etDesc.text.toString()
-            val emoji = binding.etEmoji.text.toString()
+            val title = binding.etTitle.text.toString().trim()
+            val desc = binding.etDesc.text.toString().trim()
+            val emoji = binding.etEmoji.text.toString().trim()
 
-            if (title.isNotBlank() || desc.isNotBlank() || emoji.isNotBlank()) {
+            if (title.isNotBlank()) {
                 onBackPressed()
             } else {
-                shortToast("Please fill at least one field")
+                binding.etTitle.error = "Title is required"
+                // shortToast("Please fill at least one field")
             }
         }
 
@@ -140,52 +141,54 @@ class AddEventsActivity : AppCompatActivity() {
         val desc = binding.etDesc.text.toString().trim()
         val emoji = binding.etEmoji.text.toString().trim()
 
-        if (title.isNotBlank() || desc.isNotBlank() || emoji.isNotBlank()) {
-            val day = binding.datePicker.dayOfMonth
-            val month = binding.datePicker.month
-            val year = binding.datePicker.year
-            val hour =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) binding.timePicker.hour else binding.timePicker.currentHour
-            val minute =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) binding.timePicker.minute else binding.timePicker.currentMinute
+        if (desc.isNotBlank() || emoji.isNotBlank()) {
+            if (title.isNotBlank()) {
+                val day = binding.datePicker.dayOfMonth
+                val month = binding.datePicker.month
+                val year = binding.datePicker.year
+                val hour =
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) binding.timePicker.hour else binding.timePicker.currentHour
+                val minute =
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) binding.timePicker.minute else binding.timePicker.currentMinute
 
-            val id = intent.getIntExtra("id", -11)
-            val deleteEvent = binding.swDeleteEvent.isChecked
-            val notificationAction = binding.tvNotificationAction.text.toString()
-            val notificationExtraData = binding.etNotificationActionExtra.text.toString()
-            val notificationActionMsg = binding.etMessage.text.toString()
+                val id = intent.getIntExtra("id", -11)
+                val deleteEvent = binding.swDeleteEvent.isChecked
+                val notificationAction = binding.tvNotificationAction.text.toString()
+                val notificationExtraData = binding.etNotificationActionExtra.text.toString()
+                val notificationActionMsg = binding.etMessage.text.toString()
 
-            if (intent.action == "edit" && id != -11) {
-                if (title != intent.getStringExtra("title") ||
-                    desc != intent.getStringExtra("description") ||
-                    emoji != intent.getStringExtra("emoji")
-                ) {
-                    viewModel.updateEvent(
-                        id = id,
-                        title = title,
-                        description = desc,
-                        emoji = emoji
-                    )
-                    //create or edit todo event remainder for this with update an already existing
-                    shortToast("Event updated")
-                }
-            } else {
-                val eventData = EventsModel(day, month, year, title, desc, emoji)
-                lifecycle.coroutineScope.launch {
-                    val eventId = viewModel.addEvent(eventData)
-                    if (binding.swSendNotification.isChecked)
-                        createEventReminder(
-                            NotificationModel(
-                                eventId,
-                                eventData,
-                                hour, minute, deleteEvent, notificationAction,
-                                notificationExtraData, notificationActionMsg
-                            )
+                if (intent.action == "edit" && id != -11) {
+                    if (title != intent.getStringExtra("title") ||
+                        desc != intent.getStringExtra("description") ||
+                        emoji != intent.getStringExtra("emoji")
+                    ) {
+                        viewModel.updateEvent(
+                            id = id,
+                            title = title,
+                            description = desc,
+                            emoji = emoji
                         )
+                        //create or edit todo event remainder for this with update an already existing
+                        shortToast("Event updated")
+                    }
+                } else {
+                    val eventData = EventsModel(day, month, year, title, desc, emoji)
+                    lifecycle.coroutineScope.launch {
+                        val eventId = viewModel.addEvent(eventData)
+                        if (binding.swSendNotification.isChecked)
+                            createEventReminder(
+                                NotificationModel(
+                                    eventId,
+                                    eventData,
+                                    hour, minute, deleteEvent, notificationAction,
+                                    notificationExtraData, notificationActionMsg
+                                )
+                            )
+                    }
+                    //todo add option for user to pre notify 5 or 6 or 7 days before the event
+                    shortToast("Event added")
                 }
-                //todo add option for user to pre notify 5 or 6 or 7 days before the event
-                shortToast("Event added")
-            }
+            } else binding.etTitle.error = "Title is required"
         }
         super.onBackPressed()
     }
