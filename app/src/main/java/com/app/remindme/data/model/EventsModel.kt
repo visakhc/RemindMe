@@ -31,7 +31,7 @@ data class CalendarModel(
     @PrimaryKey(autoGenerate = true) var id: Int? = null
 )
 
-data class CalendarDataModel(
-    val day: String,
-    val date: Int,
+data class ContactModel(
+    val name: String,
+    val number: String,
 )

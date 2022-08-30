@@ -3,20 +3,20 @@ package com.app.remindme.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.app.remindme.data.model.EventsModel
-import com.app.remindme.databinding.ItemEventsBinding
+import com.app.remindme.data.model.ContactModel
+import com.app.remindme.databinding.ItemContactBinding
 
-class EventsAdapter(private val listener: ItemClickListener) :
-    RecyclerView.Adapter<EventsAdapter.MyViewHolder>() {
-    private val itemList = mutableListOf<EventsModel>()
+class ContactsAdapter(private val listener: ContactItemClickListener) :
+    RecyclerView.Adapter<ContactsAdapter.MyViewHolder>() {
+    private val itemList = mutableListOf<ContactModel>()
 
-    inner class MyViewHolder(val binding: ItemEventsBinding) :
+    inner class MyViewHolder(val binding: ItemContactBinding) :
         RecyclerView.ViewHolder(binding.root) {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(
-            ItemEventsBinding.inflate(
+            ItemContactBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -26,17 +26,15 @@ class EventsAdapter(private val listener: ItemClickListener) :
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         with(itemList[position]) {
-             holder.binding.tvTitle.text = title
-            holder.binding.tvDesc.text = description
-            holder.binding.tvEventEmojis.text = emoji
-            if (emoji.length > 4) holder.binding.tvEventEmojis.isSelected = true
+            holder.binding.tvName.text = name
+            holder.binding.tvNumber.text = number
             holder.itemView.setOnClickListener {
                 listener.onItemClick(this)
             }
         }
     }
 
-    fun updateList(list: List<EventsModel>) {
+    fun updateList(list: List<ContactModel>) {
         itemList.clear()
         itemList.addAll(list)
         notifyDataSetChanged()
@@ -46,7 +44,7 @@ class EventsAdapter(private val listener: ItemClickListener) :
         return itemList.size
     }
 
-    interface ItemClickListener {
-        fun onItemClick(eventsModel: EventsModel)
+    interface ContactItemClickListener {
+        fun onItemClick(eventsModel: ContactModel)
     }
 }

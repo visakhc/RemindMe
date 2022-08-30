@@ -11,9 +11,14 @@ import android.view.View
 import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.remindme.R
+import com.app.remindme.adapter.ContactsAdapter
+import com.app.remindme.data.model.ContactModel
 import com.app.remindme.data.model.EventsModel
 import com.app.remindme.data.model.NotificationModel
 import com.app.remindme.databinding.ActivityAddEventsBinding
@@ -21,12 +26,18 @@ import com.app.remindme.services.NotifyEventService
 import com.app.remindme.ui.viewmodel.EventsViewModel
 import com.app.remindme.utils.*
 import com.app.remindme.utils.USERDATA.NOTIFICATION_CHANNEL_ID
+import contacts.async.findAsync
+import contacts.core.Contacts
+import contacts.core.util.phoneList
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
 
-class AddEventsActivity : AppCompatActivity() {
+class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickListener {
     private lateinit var viewModel: EventsViewModel
+    private var whatsappNum: String? = null
+    private val contactsAdapter by lazy { ContactsAdapter(this@AddEventsActivity) }
 
     private lateinit var binding: ActivityAddEventsBinding
     override fun onResume() {
@@ -46,6 +57,10 @@ class AddEventsActivity : AppCompatActivity() {
 
     private fun init() {
         viewModel = ViewModelProvider(this)[EventsViewModel::class.java]
+        binding.rvContacts.apply {
+            layoutManager = LinearLayoutManager(this@AddEventsActivity)
+            adapter = contactsAdapter
+        }
     }
 
     private fun initViews() {
@@ -116,8 +131,22 @@ class AddEventsActivity : AppCompatActivity() {
                 binding.layoutNotificationSettings.hide()
             }
         }
+
         binding.tvNotificationAction.setOnClickListener {
             showPopupMenu(it, R.menu.notication_action_menu)
+        }
+
+        binding.etNotificationActionExtra.doOnTextChanged { text, _, _, _ ->
+            if (text != null && text.isNotBlank() && text.length > 2) {
+                lifecycleScope.launch {
+                    val nameList = findContactsName(text)
+                    nameList.isNotEmpty()? binding.rvContacts.show():      binding.rvContacts.hide()
+
+                    contactsAdapter.updateList(nameList)
+                }
+            } else {
+                whatsappNum = null
+            }
         }
     }
 
@@ -154,7 +183,8 @@ class AddEventsActivity : AppCompatActivity() {
                 val id = intent.getIntExtra("id", -11)
                 val deleteEvent = binding.swDeleteEvent.isChecked
                 val notificationAction = binding.tvNotificationAction.text.toString()
-                val notificationExtraData = binding.etNotificationActionExtra.text.toString()
+                val notificationExtraData =
+                    whatsappNum ?: binding.etNotificationActionExtra.text.toString()
                 val notificationActionMsg = binding.etMessage.text.toString()
 
                 if (intent.action == "edit" && id != -11) {
@@ -211,7 +241,11 @@ class AddEventsActivity : AppCompatActivity() {
         /*val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val test: String = sdf.format(calendar.time)
         logThis(test)*/
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis + 200, pendingIntent)
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis + 200,
+            pendingIntent
+        )
     }
 
 
@@ -239,5 +273,26 @@ class AddEventsActivity : AppCompatActivity() {
             return@setOnMenuItemClickListener true
         }
         popup.show()
+    }
+
+
+    private suspend fun findContactsName(text: CharSequence): List<ContactModel> {
+        val contact = Contacts(this@AddEventsActivity)
+            .broadQuery()
+            .wherePartiallyMatches("$text")
+            .findAsync(Dispatchers.IO).await()
+        return contact.map {
+            ContactModel(
+                it.displayNamePrimary ?: it.displayNameAlt ?: "",
+                it.phoneList()[0].normalizedNumber ?: ""
+            )
+        }
+
+        //return contact.map { it.displayNamePrimary ?: it.displayNameAlt ?: "" }
+    }
+
+    override fun onItemClick(eventsModel: ContactModel) {
+        binding.etNotificationActionExtra.setText(eventsModel.name)
+        whatsappNum = eventsModel.name
     }
 }

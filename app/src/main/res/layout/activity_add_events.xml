@@ -232,7 +232,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingVertical="@dimen/_6sdp"
-                                android:text="Whatsapp Number" />
+                                android:text="Whatsapp" />
 
                             <EditText
                                 android:id="@+id/etNotificationActionExtra"
@@ -243,13 +243,19 @@
                                 android:layout_weight="1"
                                 android:background="@drawable/shape_edittext"
                                 android:gravity="center"
-                                android:hint="......."
+                                android:hint="name or number"
                                 android:inputType="phone"
                                 android:maxLength="10"
                                 android:paddingVertical="@dimen/_5sdp" />
-
                         </LinearLayout>
 
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvContacts"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            tools:itemCount="4"
+                            tools:listitem="@layout/item_contact" />
 
                         <EditText
                             android:id="@+id/etMessage"

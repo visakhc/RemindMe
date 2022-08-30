@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.remindme.R
 import com.app.remindme.adapter.EventsAdapter
-import com.app.remindme.adapter.ItemClickListener
 import com.app.remindme.data.model.EventsModel
 import com.app.remindme.databinding.BottomSheetLayoutBinding
 import com.app.remindme.ui.activities.AddEventsActivity
@@ -18,7 +17,7 @@ import com.app.remindme.utils.hide
 import com.app.remindme.utils.show
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class EventsBottomSheet : BottomSheetDialogFragment(), ItemClickListener {
+class EventsBottomSheet : BottomSheetDialogFragment(), EventsAdapter.ItemClickListener {
     private var binding: BottomSheetLayoutBinding? = null
     private lateinit var viewModel: EventsViewModel
     private var date = -1
