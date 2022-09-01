@@ -34,8 +34,9 @@ class ContactsAdapter(private val listener: ContactItemClickListener) :
         }
     }
 
-    fun updateList(list: List<ContactModel>) {
+    fun updateList(typedText: String, list: List<ContactModel>) {
         itemList.clear()
+        itemList.add(ContactModel(typedText, typedText))
         itemList.addAll(list)
         notifyDataSetChanged()
     }

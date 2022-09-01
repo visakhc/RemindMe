@@ -15,7 +15,9 @@ import com.app.remindme.data.model.NotificationModel
 import com.app.remindme.ui.activities.MainActivity
 import com.app.remindme.utils.USERDATA.NOTIFICATION_CHANNEL_ID
 import com.app.remindme.utils.logThis
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class NotifyEventService : BroadcastReceiver() {
@@ -42,7 +44,7 @@ class NotifyEventService : BroadcastReceiver() {
                 "Default" -> Intent(context, MainActivity::class.java)
                 "Whatsapp" -> {
                     val url =
-                        "https://api.whatsapp.com/send?phone=+91${data.notificationExtraData}&text=${data.notificationActionMsg}".toUri()
+                        "https://api.whatsapp.com/send?phone=${data.notificationExtraData}&text=${data.notificationActionMsg}".toUri()
                     logThis("Trying to open Whatsapp $url")
                     Intent(Intent.ACTION_VIEW).also { it.data = url }
                 }

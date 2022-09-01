@@ -180,9 +180,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
                 R.id.october -> 9
                 R.id.november -> 10
                 R.id.december -> 11
-                else -> {
-                    -1
-                }
+                else -> -1
             }
             if (month != -1) {
                 mMonth = month

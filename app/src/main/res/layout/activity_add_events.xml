@@ -14,6 +14,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -37,6 +38,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:background="@drawable/shape_edittext"
                 android:gravity="center"
+                android:paddingHorizontal="@dimen/_5sdp"
                 android:hint="title"
                 android:inputType="text|textAutoComplete|textAutoCorrect|textMultiLine"
                 android:paddingVertical="@dimen/_9sdp"
@@ -53,6 +55,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:background="@drawable/shape_edittext"
                 android:gravity="center"
+                android:paddingHorizontal="@dimen/_5sdp"
                 android:hint="description"
                 android:inputType="text|textAutoComplete|textAutoCorrect|textMultiLine"
                 android:paddingVertical="@dimen/_9sdp"
@@ -69,6 +72,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:background="@drawable/shape_edittext"
                 android:gravity="center"
+                android:paddingHorizontal="@dimen/_5sdp"
                 android:hint="priority emoji"
                 android:inputType="text|textAutoComplete|textAutoCorrect"
                 android:paddingVertical="@dimen/_9sdp"
@@ -221,9 +225,9 @@
                         android:orientation="vertical"
                         android:visibility="gone">
 
-                        <LinearLayout
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:orientation="horizontal">
 
                             <TextView
@@ -232,7 +236,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingVertical="@dimen/_6sdp"
-                                android:text="Whatsapp" />
+                                android:text="Whatsapp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
 
                             <EditText
                                 android:id="@+id/etNotificationActionExtra"
@@ -240,22 +246,38 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_10sdp"
-                                android:layout_weight="1"
                                 android:background="@drawable/shape_edittext"
+                                android:clickable="true"
+                                android:focusable="true"
                                 android:gravity="center"
                                 android:hint="name or number"
-                                android:inputType="phone"
-                                android:maxLength="10"
-                                android:paddingVertical="@dimen/_5sdp" />
-                        </LinearLayout>
+                                android:paddingHorizontal="@dimen/_5sdp"
+                                android:paddingVertical="@dimen/_5sdp"
+                                android:singleLine="true"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/tvNotificationActionExtra"
+                                app:layout_constraintTop_toTopOf="parent" />
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rvContacts"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            tools:itemCount="4"
-                            tools:listitem="@layout/item_contact" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/rvContacts"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginBottom="@dimen/_3sdp"
+                                android:fadeScrollbars="false"
+                                android:nestedScrollingEnabled="true"
+                                android:scrollbars="vertical"
+                                android:visibility="gone"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="@+id/etNotificationActionExtra"
+                                app:layout_constraintHeight_max="@dimen/_100sdp"
+                                app:layout_constraintStart_toStartOf="@+id/etNotificationActionExtra"
+                                app:layout_constraintTop_toBottomOf="@+id/etNotificationActionExtra"
+                                tools:itemCount="8"
+                                tools:listitem="@layout/item_contact" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <EditText
                             android:id="@+id/etMessage"

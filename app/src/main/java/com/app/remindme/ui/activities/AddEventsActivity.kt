@@ -7,7 +7,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.text.TextWatcher
 import android.view.View
+import android.widget.ScrollView
 import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
@@ -35,9 +37,11 @@ import java.util.*
 
 
 class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickListener {
+    private lateinit var textWatcher: TextWatcher
     private lateinit var viewModel: EventsViewModel
     private var whatsappNum: String? = null
     private val contactsAdapter by lazy { ContactsAdapter(this@AddEventsActivity) }
+    private var hasRecyclerViewFocused = false // to focus recycler view when keyboard is open
 
     private lateinit var binding: ActivityAddEventsBinding
     override fun onResume() {
@@ -82,6 +86,8 @@ class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickL
         binding.etDesc.setText(description)
         binding.etEmoji.setText(emoji)
         binding.tvNotificationSound.isSelected = true
+        binding.scrollView.isSmoothScrollingEnabled = true
+
         //todo add option to sync contacts
     }
 
@@ -136,16 +142,25 @@ class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickL
             showPopupMenu(it, R.menu.notication_action_menu)
         }
 
-        binding.etNotificationActionExtra.doOnTextChanged { text, _, _, _ ->
+        textWatcher = binding.etNotificationActionExtra.doOnTextChanged { text, _, _, _ ->
+            whatsappNum = null
             if (text != null && text.isNotBlank() && text.length > 2) {
                 lifecycleScope.launch {
                     val nameList = findContactsName(text)
-                    nameList.isNotEmpty()? binding.rvContacts.show():      binding.rvContacts.hide()
-
-                    contactsAdapter.updateList(nameList)
+                    binding.rvContacts.show()
+//                    if (nameList.isNotEmpty()) binding.rvContacts.show() else binding.rvContacts.hide()
+                    val typedNumber =
+                        if ("${text.subSequence(0, 3)}" == "+91") "$text" else "+91$text"
+                    contactsAdapter.updateList(typedNumber, nameList)
+                    if (!hasRecyclerViewFocused) {
+                        binding.scrollView.arrowScroll(ScrollView.FOCUS_DOWN)
+                        binding.etNotificationActionExtra.requestFocus()
+                        hasRecyclerViewFocused = true
+                    }
                 }
             } else {
-                whatsappNum = null
+                binding.rvContacts.hide()
+                hasRecyclerViewFocused = false
             }
         }
     }
@@ -169,58 +184,67 @@ class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickL
         val title = binding.etTitle.text.toString().trim()
         val desc = binding.etDesc.text.toString().trim()
         val emoji = binding.etEmoji.text.toString().trim()
+        if (title.isBlank() && desc.isBlank() && emoji.isBlank()) super.onBackPressed()
+        else if (title.isNotBlank()) {
+            val day = binding.datePicker.dayOfMonth
+            val month = binding.datePicker.month
+            val year = binding.datePicker.year
+            val hour =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) binding.timePicker.hour else binding.timePicker.currentHour
+            val minute =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) binding.timePicker.minute else binding.timePicker.currentMinute
 
-        if (desc.isNotBlank() || emoji.isNotBlank()) {
-            if (title.isNotBlank()) {
-                val day = binding.datePicker.dayOfMonth
-                val month = binding.datePicker.month
-                val year = binding.datePicker.year
-                val hour =
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) binding.timePicker.hour else binding.timePicker.currentHour
-                val minute =
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) binding.timePicker.minute else binding.timePicker.currentMinute
-
-                val id = intent.getIntExtra("id", -11)
-                val deleteEvent = binding.swDeleteEvent.isChecked
-                val notificationAction = binding.tvNotificationAction.text.toString()
-                val notificationExtraData =
-                    whatsappNum ?: binding.etNotificationActionExtra.text.toString()
-                val notificationActionMsg = binding.etMessage.text.toString()
-
-                if (intent.action == "edit" && id != -11) {
-                    if (title != intent.getStringExtra("title") ||
-                        desc != intent.getStringExtra("description") ||
-                        emoji != intent.getStringExtra("emoji")
-                    ) {
-                        viewModel.updateEvent(
-                            id = id,
-                            title = title,
-                            description = desc,
-                            emoji = emoji
-                        )
-                        //create or edit todo event remainder for this with update an already existing
-                        shortToast("Event updated")
-                    }
-                } else {
-                    val eventData = EventsModel(day, month, year, title, desc, emoji)
-                    lifecycle.coroutineScope.launch {
-                        val eventId = viewModel.addEvent(eventData)
-                        if (binding.swSendNotification.isChecked)
-                            createEventReminder(
-                                NotificationModel(
-                                    eventId,
-                                    eventData,
-                                    hour, minute, deleteEvent, notificationAction,
-                                    notificationExtraData, notificationActionMsg
-                                )
-                            )
-                    }
-                    //todo add option for user to pre notify 5 or 6 or 7 days before the event
-                    shortToast("Event added")
+            val id = intent.getIntExtra("id", -11)
+            val deleteEvent = binding.swDeleteEvent.isChecked
+            val notificationAction = binding.tvNotificationAction.text.toString()
+            var notificationActionMsg = ""
+            var notificationExtraData = ""
+            if (notificationAction == "Whatsapp" && whatsappNum != null) {
+                notificationExtraData = whatsappNum!!
+                notificationActionMsg = binding.etMessage.text.toString()
+            } else {
+                shortToast("Please enter a valid number or name")
+                binding.etNotificationActionExtra.error = "Please enter a valid number or name"
+                return
+            }
+            if (intent.action == "edit" && id != -11) {
+                if (title != intent.getStringExtra("title") ||
+                    desc != intent.getStringExtra("description") ||
+                    emoji != intent.getStringExtra("emoji")
+                ) {
+                    viewModel.updateEvent(
+                        id = id,
+                        title = title,
+                        description = desc,
+                        emoji = emoji
+                    )
+                    //create or edit todo event remainder intent for this with update an already existing
+                    shortToast("Event updated")
                 }
-            } else binding.etTitle.error = "Title is required"
+            } else {
+                val eventData = EventsModel(day, month, year, title, desc, emoji)
+                lifecycle.coroutineScope.launch {
+                    val eventId = viewModel.addEvent(eventData)
+                    if (binding.swSendNotification.isChecked)
+                        createEventReminder(
+                            NotificationModel(
+                                eventId,
+                                eventData,
+                                hour, minute, deleteEvent, notificationAction,
+                                notificationExtraData, notificationActionMsg
+                            )
+                        )
+                }
+                //todo add option for user to pre notify 5 or 6 or 7 days before the event
+                shortToast("Event added")
+            }
+            super.onBackPressed()
+        } else {
+            binding.etTitle.error = "Title is required"
+            binding.etTitle.requestFocus()
         }
-        super.onBackPressed()
+
+
     }
 
     private fun createEventReminder(notificationModel: NotificationModel) {
@@ -292,7 +316,12 @@ class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickL
     }
 
     override fun onItemClick(eventsModel: ContactModel) {
+        binding.etNotificationActionExtra.removeTextChangedListener(textWatcher)
         binding.etNotificationActionExtra.setText(eventsModel.name)
-        whatsappNum = eventsModel.name
+        //next line checks iif the typed number is a mobile number or not with pattern
+        whatsappNum = eventsModel.number
+        binding.rvContacts.hide()
+        binding.etMessage.requestFocus()
+        binding.etNotificationActionExtra.addTextChangedListener(textWatcher)
     }
 }
