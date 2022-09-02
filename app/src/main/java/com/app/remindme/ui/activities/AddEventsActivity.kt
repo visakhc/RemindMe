@@ -104,7 +104,7 @@ class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickL
                 onBackPressed()
             } else {
                 binding.etTitle.error = "Title is required"
-                // shortToast("Please fill at least one field")
+                shortToast("Title is required")
             }
         }
 
@@ -199,14 +199,32 @@ class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickL
             val notificationAction = binding.tvNotificationAction.text.toString()
             var notificationActionMsg = ""
             var notificationExtraData = ""
-            if (notificationAction == "Whatsapp" && whatsappNum != null) {
-                notificationExtraData = whatsappNum!!
-                notificationActionMsg = binding.etMessage.text.toString()
-            } else {
-                shortToast("Please enter a valid number or name")
-                binding.etNotificationActionExtra.error = "Please enter a valid number or name"
-                return
+
+            when (notificationAction) {
+                "Whatsapp" -> {
+                    if (whatsappNum != null) {
+                        notificationExtraData = whatsappNum!!
+                        notificationActionMsg = binding.etMessage.text.toString()
+                    } else {
+                        shortToast("Please enter a valid number or name")
+                        binding.etNotificationActionExtra.error =
+                            "Please enter a valid number or name"
+                        return
+                    }
+                }
+                "Instagram" -> {
+                    val insta = binding.etNotificationActionExtra.text.toString()
+                    if (insta.isNotBlank()) {
+                        notificationExtraData = insta
+                    } else {
+                        shortToast("Please enter an instagram username")
+                        binding.etNotificationActionExtra.error =
+                            "Please enter an instagram username"
+                        return
+                    }
+                }
             }
+
             if (intent.action == "edit" && id != -11) {
                 if (title != intent.getStringExtra("title") ||
                     desc != intent.getStringExtra("description") ||
@@ -220,6 +238,7 @@ class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickL
                     )
                     //create or edit todo event remainder intent for this with update an already existing
                     shortToast("Event updated")
+                    super.onBackPressed()
                 }
             } else {
                 val eventData = EventsModel(day, month, year, title, desc, emoji)
@@ -237,11 +256,12 @@ class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickL
                 }
                 //todo add option for user to pre notify 5 or 6 or 7 days before the event
                 shortToast("Event added")
+                super.onBackPressed()
             }
-            super.onBackPressed()
+
         } else {
             binding.etTitle.error = "Title is required"
-            binding.etTitle.requestFocus()
+            shortToast("Title is required")
         }
 
 
@@ -253,13 +273,16 @@ class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickL
         val intent = Intent(this@AddEventsActivity, NotifyEventService::class.java)
         intent.putExtra("data", args)
         val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-        val pendingIntent =
-            PendingIntent.getBroadcast(
-                this@AddEventsActivity,
-                0,
-                intent,
+        val pendingIntent = PendingIntent.getBroadcast(
+            this@AddEventsActivity,
+            0,
+            intent,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            } else {
                 PendingIntent.FLAG_UPDATE_CURRENT
-            )
+            }
+        )
         val calendar = Calendar.getInstance()
         //   calendar.set(year, month, date, hour, minute, 0)
         /*val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -287,11 +310,13 @@ class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickL
                     binding.etMessage.show()
                     binding.layoutNotificationActionExtra.show()
                     binding.tvNotificationActionExtra.text = "Whatsapp Number"
+                    binding.etNotificationActionExtra.hint = "name or number"
                 }
                 "Instagram" -> {
                     binding.etMessage.hide()
                     binding.layoutNotificationActionExtra.show()
                     binding.tvNotificationActionExtra.text = "Instagram ID"
+                    binding.etNotificationActionExtra.hint = "username"
                 }
             }
             return@setOnMenuItemClickListener true

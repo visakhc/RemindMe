@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
+import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
 import com.app.remindme.R
@@ -57,7 +58,16 @@ class NotifyEventService : BroadcastReceiver() {
                 Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
 
             val pendingIntent =
-                PendingIntent.getActivity(this, 0, notificationIntent, 0)
+                PendingIntent.getActivity(
+                    this,
+                    0,
+                    notificationIntent,
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                    } else {
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                    }
+                )
 
             val mNotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             val mBuilder = NotificationCompat.Builder(context, default_notification_channel_id)
