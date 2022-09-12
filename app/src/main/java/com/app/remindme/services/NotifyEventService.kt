@@ -49,7 +49,11 @@ class NotifyEventService : BroadcastReceiver() {
                     logThis("Trying to open Whatsapp $url")
                     Intent(Intent.ACTION_VIEW).also { it.data = url }
                 }
-                "Instagram" -> Intent(context, MainActivity::class.java) //todo
+                "Instagram" -> {
+                    val url = "https://instagram.com/${data.notificationExtraData}".toUri()
+                    logThis("Trying to open Instagram $url")
+                    Intent(Intent.ACTION_VIEW).also { it.data = url }
+                }
                 else -> {
                     Intent(context, MainActivity::class.java)
                 }

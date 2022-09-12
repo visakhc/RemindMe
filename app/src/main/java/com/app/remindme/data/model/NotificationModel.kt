@@ -10,5 +10,5 @@ data class NotificationModel(
     val deleteEvent: Boolean,
     val notificationAction: String? = "",
     val notificationExtraData: String? = "",
-    val notificationActionMsg: String? = ""
+    val notificationActionMsg: String? = "",
 ) : Serializable

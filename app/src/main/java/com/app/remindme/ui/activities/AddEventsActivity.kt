@@ -25,6 +25,7 @@ import com.app.remindme.data.model.EventsModel
 import com.app.remindme.data.model.NotificationModel
 import com.app.remindme.databinding.ActivityAddEventsBinding
 import com.app.remindme.services.NotifyEventService
+import com.app.remindme.ui.bottomsheets.ReminderBottomSheet
 import com.app.remindme.ui.viewmodel.EventsViewModel
 import com.app.remindme.utils.*
 import com.app.remindme.utils.USERDATA.NOTIFICATION_CHANNEL_ID
@@ -36,13 +37,14 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 
-class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickListener {
+class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickListener,
+    ReminderBottomSheet.OnSaveClickListener {
     private lateinit var textWatcher: TextWatcher
     private lateinit var viewModel: EventsViewModel
     private var whatsappNum: String? = null
     private val contactsAdapter by lazy { ContactsAdapter(this@AddEventsActivity) }
     private var hasRecyclerViewFocused = false // to focus recycler view when keyboard is open
-
+    private var eventReminderList = listOf<Boolean>()
     private lateinit var binding: ActivityAddEventsBinding
     override fun onResume() {
         super.onResume()
@@ -142,9 +144,16 @@ class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickL
             showPopupMenu(it, R.menu.notication_action_menu)
         }
 
-        textWatcher = binding.etNotificationActionExtra.doOnTextChanged { text, _, _, _ ->
+        binding.tvRepeatStatus.setOnClickListener {
+            val reminderBottomSheet = ReminderBottomSheet()
+            reminderBottomSheet.showBottomSheet(supportFragmentManager, eventReminderList)
+            reminderBottomSheet.setOnSaveListener(this)
+        }
+
+        textWatcher = binding.etNotificationActionExtra.doOnTextChanged { txt, _, _, _ ->
             whatsappNum = null
-            if (text != null && text.isNotBlank() && text.length > 2) {
+            if (txt != null && txt.isNotBlank() && txt.length > 3 && binding.tvNotificationAction.text == "Whatsapp") {
+                val text = txt
                 lifecycleScope.launch {
                     val nameList = findContactsName(text)
                     binding.rvContacts.show()
@@ -236,7 +245,7 @@ class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickL
                         description = desc,
                         emoji = emoji
                     )
-                    //create or edit todo event remainder intent for this with update an already existing
+                    //create or edit todo event reminder intent for this with update an already existing
                     shortToast("Event updated")
                     super.onBackPressed()
                 }
@@ -293,6 +302,53 @@ class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickL
             calendar.timeInMillis + 200,
             pendingIntent
         )
+
+        if (eventReminderList.isNotEmpty()) {
+            eventReminderList.forEachIndexed { index, bool ->
+                when (index) {
+                    0 -> {
+                        if (bool) { //sets alarm for 1 day before
+                            alarmManager.setExact(
+                                AlarmManager.RTC_WAKEUP,
+                                calendar.timeInMillis - 1000 * 60 * 60 * 24 * 1,
+                                pendingIntent
+                            )
+                        }
+                    }
+                    1 -> { //sets alarm 3 days before
+                        if (bool) {
+                            alarmManager.setExact(
+                                AlarmManager.RTC_WAKEUP,
+                                calendar.timeInMillis - 1000 * 60 * 60 * 24 * 3,
+                                pendingIntent
+                            )
+                        }
+
+                    }
+                    2 -> {//sets alarm 7 days before
+                        if (bool) {
+                            alarmManager.setExact(
+                                AlarmManager.RTC_WAKEUP,
+                                calendar.timeInMillis - 1000 * 60 * 60 * 24 * 7,
+                                pendingIntent
+                            )
+                        }
+
+                    }
+                    3 -> {//sets alarm 28 days before
+                        if (bool) {
+                            alarmManager.setExact(
+                                AlarmManager.RTC_WAKEUP,
+                                calendar.timeInMillis - 1000 * 60 * 60 * 24 * 28L,
+                                pendingIntent
+                            )
+                        }
+
+
+                    }
+                }
+            }
+        }
     }
 
 
@@ -300,7 +356,6 @@ class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickL
         val popup = PopupMenu(this@AddEventsActivity, view)
         popup.menuInflater.inflate(menuRes, popup.menu)
         popup.setOnMenuItemClickListener {
-            saveSessionData("notification_action", it.title.toString()) //todo remove
             binding.tvNotificationAction.text = it.title
             when (it.title) {
                 "Default" -> {
@@ -348,5 +403,10 @@ class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickL
         binding.rvContacts.hide()
         binding.etMessage.requestFocus()
         binding.etNotificationActionExtra.addTextChangedListener(textWatcher)
+    }
+
+    override fun onSave(list: List<Boolean>) {
+        eventReminderList = list
+        logThis(eventReminderList.toString())
     }
 }
