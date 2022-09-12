@@ -312,12 +312,11 @@
                         style="@style/smallTextRegular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="@dimen/_10sdp"
                         android:gravity="center_vertical"
                         android:paddingVertical="@dimen/_6sdp"
-                        android:text="Never,before 2 days"
+                        android:text="Default: 1 day before the event"
                         android:textColor="@color/gray"
-                        app:drawableEndCompat="@drawable/ic_arrow_forward" />
+                        android:tooltipText="by default a reminder will be send 1 day before the event" />
 
                 </LinearLayout>
             </LinearLayout>

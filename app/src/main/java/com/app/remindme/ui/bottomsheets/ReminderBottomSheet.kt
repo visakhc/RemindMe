@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import com.app.remindme.R
 import com.app.remindme.databinding.BottomSheetReminderBinding
-import com.app.remindme.utils.logThis
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class ReminderBottomSheet : BottomSheetDialogFragment() {
     private var binding: BottomSheetReminderBinding? = null
-
+    private var dataList = listOf<Boolean>()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -29,7 +28,6 @@ class ReminderBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         init()
         initViews()
         handleEvents()
@@ -41,20 +39,19 @@ class ReminderBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun initViews() {
-    }
-
-    fun showBottomSheet(supportFragmentManager: FragmentManager, data: List<Boolean>) {
-        show(supportFragmentManager, "ReminderBottomSheet")
-        logThis("showBottomSheet $data")
-        data.forEachIndexed { index, bool ->
+        dataList.forEachIndexed { index, bool ->
             when (index) {
                 0 -> binding?.check1Day?.isChecked = bool
-                1 -> binding?.check3Day?.isChecked =
-                    bool //todo working here. how to get the value of the checkbox
+                1 -> binding?.check3Day?.isChecked = bool
                 2 -> binding?.check7Day?.isChecked = bool
                 3 -> binding?.check30Day?.isChecked = bool
             }
         }
+    }
+
+    fun showBottomSheet(supportFragmentManager: FragmentManager, data: List<Boolean>) {
+        this.dataList = data
+        show(supportFragmentManager, "ReminderBottomSheet")
     }
 
     fun setOnSaveListener(listener: OnSaveClickListener) {
@@ -100,6 +97,6 @@ class ReminderBottomSheet : BottomSheetDialogFragment() {
     }
 
     interface OnSaveClickListener {
-        fun onSave(list: List<Boolean>)
+        fun onSave(list: List<Boolean>) //todo sent the options as text too to show on the other screen
     }
 }
