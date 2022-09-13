@@ -266,7 +266,6 @@ class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickL
                             )
                         )
                 }
-                //todo add option for user to pre notify 5 or 6 or 7 days before the event
                 shortToast("Event added")
                 super.onBackPressed()
             }

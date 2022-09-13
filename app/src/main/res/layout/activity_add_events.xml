@@ -236,7 +236,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingVertical="@dimen/_6sdp"
-                                android:text="Whatsapp"
+                                android:text="@string/whatsapp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -286,7 +286,7 @@
                             android:layout_marginVertical="@dimen/_5sdp"
                             android:background="@drawable/shape_edittext"
                             android:gravity="center"
-                            android:hint="your message.."
+                            android:hint="@string/your_message"
                             android:inputType="textMultiLine"
                             android:minHeight="@dimen/_40sdp"
                             android:padding="@dimen/_3sdp" />
@@ -305,7 +305,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:paddingVertical="@dimen/_6sdp"
-                        android:text="Remind this event" />
+                        android:text="@string/remind_this_event" />
 
                     <TextView
                         android:id="@+id/tvRepeatStatus"
@@ -314,9 +314,9 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:paddingVertical="@dimen/_6sdp"
-                        android:text="Default ( 1 day before the event )"
+                        android:text="@string/default_1_day_before_the_event"
                         android:textColor="@color/gray"
-                        android:tooltipText="by default a reminder will be send 1 day before the event" />
+                        android:tooltipText="@string/remindEventTooltip" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -329,7 +329,7 @@
                 android:layout_marginBottom="@dimen/_20sdp"
                 android:paddingHorizontal="@dimen/_50sdp"
                 android:paddingVertical="@dimen/_9sdp"
-                android:text="Save Event"
+                android:text="@string/save_event"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 app:cornerRadius="@dimen/_8sdp"

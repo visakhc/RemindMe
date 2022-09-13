@@ -110,19 +110,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chipGroup" />  <!--todo-->
 
-    <TextView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btSaveReminder"
-        style="@style/normalTextMedium"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginVertical="@dimen/_10sdp"
-        android:background="@drawable/shape_edittext"
-        android:paddingHorizontal="@dimen/_40sdp"
         android:paddingVertical="@dimen/_7sdp"
         android:text="Save"
+        android:layout_marginVertical="@dimen/_10sdp"
+        android:paddingHorizontal="@dimen/_40sdp"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        app:cornerRadius="@dimen/_8sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btCustom" />
+        app:layout_constraintTop_toBottomOf="@+id/btCustom"
+        app:layout_constraintVertical_bias="0.8" />
 </androidx.constraintlayout.widget.ConstraintLayout>

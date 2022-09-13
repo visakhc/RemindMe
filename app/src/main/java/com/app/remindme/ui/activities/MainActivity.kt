@@ -129,7 +129,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
         cal.set(mYear, mMonth, 4)
         binding?.tvMonth?.text = getDayFormatted("MMMM", cal)
         binding?.tvDay?.text = if (mMonth == thisMonth) getDayFormatted("EEEE") else ""
-        lifecycle.coroutineScope.launch { //todo add splash screen to get time
+        lifecycle.coroutineScope.launch { //todo add splash screen to get time for this process
             val localCalendarData = viewModel.getCalendarData(mMonth, mYear)
             calendarList = localCalendarData.ifEmpty { calendarBuilder(mMonth, mYear) }
             mAdapter.updateList(mMonth, calendarList)
@@ -163,7 +163,6 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnClickListener {
     }
 
     private fun showMenu(v: View, @MenuRes menuRes: Int) {
-        //todo change this to more lite way
         val popup = PopupMenu(this@MainActivity, v)
         popup.menuInflater.inflate(menuRes, popup.menu)
         popup.setOnMenuItemClickListener {

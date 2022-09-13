@@ -14,6 +14,12 @@
     <string name="follow_battery_saver">Follow Battery saver</string>
     <string name="title">Title</string>
     <string name="note">Note</string>
+    <string name="remindEventTooltip">by default a reminder will be send 1 day before the event at the time set by the user above</string>
+    <string name="default_1_day_before_the_event">Default ( 1 day before the event )</string>
+    <string name="save_event">Save Event</string>
+    <string name="remind_this_event">Remind this event</string>
+    <string name="your_message">your message..</string>
+    <string name="whatsapp">Whatsapp</string>
 
     <string-array name="months_array">
         <item>January</item>
