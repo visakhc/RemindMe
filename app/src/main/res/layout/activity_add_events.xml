@@ -314,7 +314,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:paddingVertical="@dimen/_6sdp"
-                        android:text="Default: 1 day before the event"
+                        android:text="Default ( 1 day before the event )"
                         android:textColor="@color/gray"
                         android:tooltipText="by default a reminder will be send 1 day before the event" />
 

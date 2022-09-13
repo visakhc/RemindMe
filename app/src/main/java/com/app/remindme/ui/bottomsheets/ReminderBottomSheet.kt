@@ -92,11 +92,10 @@ class ReminderBottomSheet : BottomSheetDialogFragment() {
                 )
             )
             dismiss()
-
         }
     }
 
     interface OnSaveClickListener {
-        fun onSave(list: List<Boolean>) //todo sent the options as text too to show on the other screen
+        fun onSave(list: List<Boolean>)
     }
 }

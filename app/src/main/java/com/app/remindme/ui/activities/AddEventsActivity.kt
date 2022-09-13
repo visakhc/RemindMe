@@ -27,8 +27,11 @@ import com.app.remindme.databinding.ActivityAddEventsBinding
 import com.app.remindme.services.NotifyEventService
 import com.app.remindme.ui.bottomsheets.ReminderBottomSheet
 import com.app.remindme.ui.viewmodel.EventsViewModel
-import com.app.remindme.utils.*
 import com.app.remindme.utils.USERDATA.NOTIFICATION_CHANNEL_ID
+import com.app.remindme.utils.getNotificationSound
+import com.app.remindme.utils.hide
+import com.app.remindme.utils.shortToast
+import com.app.remindme.utils.show
 import contacts.async.findAsync
 import contacts.core.Contacts
 import contacts.core.util.phoneList
@@ -407,6 +410,20 @@ class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickL
 
     override fun onSave(list: List<Boolean>) {
         eventReminderList = list
-        logThis(eventReminderList.toString())
+        var text = ""
+        list.forEachIndexed { index, bool ->
+            text += when (index) {
+                0 -> if (bool) "1, " else ""
+                1 -> if (bool) "3, " else ""
+                2 -> if (bool) "7, " else ""
+                3 -> if (bool) "28, " else ""
+                else -> ""
+            }
+            if (index == list.lastIndex) {
+                binding.tvRepeatStatus.text =
+                    if (text.isNotBlank()) "${text}days before the event" else "Never"
+            }
+        }
+
     }
 }
