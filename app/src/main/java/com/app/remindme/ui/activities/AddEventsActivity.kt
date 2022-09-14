@@ -25,6 +25,7 @@ import com.app.remindme.data.model.EventsModel
 import com.app.remindme.data.model.NotificationModel
 import com.app.remindme.databinding.ActivityAddEventsBinding
 import com.app.remindme.services.NotifyEventService
+import com.app.remindme.services.pendingIntentFlags
 import com.app.remindme.ui.bottomsheets.ReminderBottomSheet
 import com.app.remindme.ui.viewmodel.EventsViewModel
 import com.app.remindme.utils.USERDATA.NOTIFICATION_CHANNEL_ID
@@ -288,11 +289,7 @@ class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickL
             this@AddEventsActivity,
             0,
             intent,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            } else {
-                PendingIntent.FLAG_UPDATE_CURRENT
-            }
+            pendingIntentFlags
         )
         val calendar = Calendar.getInstance()
         //   calendar.set(year, month, date, hour, minute, 0)

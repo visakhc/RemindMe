@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../.gradle/caches/transforms-3/27066a20aef4004116056eb205cd2766/transformed/material-1.6.1/res/drawable/ic_mtrl_chip_checked_black.xml" value="0.19" />
+        <entry key="../../.gradle/caches/transforms-3/e68df9ffecd3fa1b6f7ac83846d27202/transformed/core-1.8.0/res/drawable/notification_bg_low.xml" value="0.19" />
         <entry key="../../Android/Sdk/platforms/android-31/data/res/layout/select_dialog_singlechoice.xml" value="0.12118055555555556" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/RemindMe/app/src/main/res/drawable/divider.xml" value="0.337" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/RemindMe/app/src/main/res/drawable/ic_add_black_24dp.xml" value="0.144" />
@@ -28,7 +29,7 @@
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.19" />
         <entry key="app/src/main/res/drawable/shape_edittext.xml" value="0.2655" />
         <entry key="app/src/main/res/font/nunito.xml" value="0.21197916666666666" />
-        <entry key="app/src/main/res/layout/activity_add_events.xml" value="0.2375" />
+        <entry key="app/src/main/res/layout/activity_add_events.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.35625" />
         <entry key="app/src/main/res/layout/activity_test.xml" value="0.12118055555555556" />
         <entry key="app/src/main/res/layout/alert_dialog_delete_all.xml" value="0.5" />
@@ -56,5 +57,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.1" />
+      </ProjectState>
+    </option>
   </component>
 </project>

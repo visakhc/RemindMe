@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
-import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
 import com.app.remindme.R
@@ -24,12 +23,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class NotifyEventService : BroadcastReceiver() {
+class NotificationClickListener : BroadcastReceiver() {
     private val default_notification_channel_id = "default"
 
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        with(context!!) {
+        with(context!!) { //todo working on here
             val data = intent?.getBundleExtra("data")
                 ?.getSerializable("notificationModel") as NotificationModel
             var title = data.eventsModel.title
@@ -127,10 +126,4 @@ class NotifyEventService : BroadcastReceiver() {
             }
         }
     }
-}
-
-val pendingIntentFlags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-} else {
-    PendingIntent.FLAG_UPDATE_CURRENT
 }

@@ -23,6 +23,11 @@
             android:enabled="true"
             android:exported="true" />
 
+        <receiver
+            android:name=".services.NotificationClickListener"
+            android:enabled="true"
+            android:exported="true" />
+
         <activity
             android:name=".ui.activities.AddEventsActivity"
             android:windowSoftInputMode="adjustResize"

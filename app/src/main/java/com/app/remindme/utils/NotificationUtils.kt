@@ -9,6 +9,10 @@ import android.os.Build
 import java.io.File
 
 
+const val DISMISS_ACTION = "DISMISS"
+const val PRIMARY_ACTION = "PRIMARY"
+const val SECONDARY_ACTION = "SECONDARY"
+
 fun Context.getNotificationSound(): String? {
     val nManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
