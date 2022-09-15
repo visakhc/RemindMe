@@ -28,16 +28,14 @@ import com.app.remindme.services.NotifyEventService
 import com.app.remindme.services.pendingIntentFlags
 import com.app.remindme.ui.bottomsheets.ReminderBottomSheet
 import com.app.remindme.ui.viewmodel.EventsViewModel
+import com.app.remindme.utils.*
 import com.app.remindme.utils.USERDATA.NOTIFICATION_CHANNEL_ID
-import com.app.remindme.utils.getNotificationSound
-import com.app.remindme.utils.hide
-import com.app.remindme.utils.shortToast
-import com.app.remindme.utils.show
 import contacts.async.findAsync
 import contacts.core.Contacts
 import contacts.core.util.phoneList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -292,13 +290,20 @@ class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickL
             pendingIntentFlags
         )
         val calendar = Calendar.getInstance()
-        //   calendar.set(year, month, date, hour, minute, 0)
-        /*val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        calendar.set(
+            notificationModel.eventsModel.year,
+            notificationModel.eventsModel.month,
+            notificationModel.eventsModel.day,
+            notificationModel.hour,
+            notificationModel.minute,
+            0
+        )
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val test: String = sdf.format(calendar.time)
-        logThis(test)*/
+        logThis("Event Set for $test")
         alarmManager.setExact(
             AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis + 200,
+            calendar.timeInMillis,
             pendingIntent
         )
 

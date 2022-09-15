@@ -97,7 +97,7 @@ class NotifyEventService : BroadcastReceiver() {
                     intentAction.also { it.action = DISMISS_ACTION },
                     pendingIntentFlags
                 )
-                mBuilder.addAction(R.drawable.ic_add_outline, "dismiss", pendingIntentDismiss)
+                mBuilder.addAction(R.drawable.ic_check_black_24dp, "dismiss", pendingIntentDismiss)
 
                 val pendingIntentPri = PendingIntent.getBroadcast(
                     this,
@@ -113,8 +113,7 @@ class NotifyEventService : BroadcastReceiver() {
                     intentAction.also { it.action = SECONDARY_ACTION },
                     pendingIntentFlags
                 )
-                mBuilder.addAction(R.drawable.ic_arrow_forward, "1 hour", pendingIntentSec)
-
+                mBuilder.addAction(R.drawable.ic_add, "1 hour", pendingIntentSec)
 
                 mNotificationManager.notify(notifId, mBuilder.build())
 
