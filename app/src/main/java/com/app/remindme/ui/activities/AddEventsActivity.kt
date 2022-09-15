@@ -236,7 +236,7 @@ class AddEventsActivity : AppCompatActivity(), ContactsAdapter.ContactItemClickL
                 }
             }
 
-            if (intent.action == "edit" && id != -11) {
+            if (intent.action == "edit" && id != -11) { //todo fix onbackpressed with editing data
                 if (title != intent.getStringExtra("title") ||
                     desc != intent.getStringExtra("description") ||
                     emoji != intent.getStringExtra("emoji")
